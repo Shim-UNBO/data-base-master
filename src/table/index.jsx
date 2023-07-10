@@ -25,6 +25,7 @@ const TablePage = () => {
   const [controlPage, setControlPage] = useState(false)
   const [managePage, setManagePage] = useState(false)
   const [reserPage, setReserPage] = useState(false)
+  const [userInfo, setUserInfo] = useState(null); 
   // SUBSCRIPTION BUTTON STATES :
 
   // SEARCH STATES:
@@ -51,6 +52,7 @@ const TablePage = () => {
       // 회원 정보 확인 결과에 따라 로그인 처리
       if (data.statusCodeValue !== 400) {
         localStorage.setItem('category',data.category);
+        setUserInfo(data); // 사용자 정보 저장
         setAccess(true);
       } else {
         alert('아이디 또는 패스워드가 잘못되었습니다.');
@@ -61,7 +63,11 @@ const TablePage = () => {
       // 에러 처리에 대한 추가로 실행할 코드 작성
     });
 };
-
+const onKeyPress = (e) => {
+  if (e.key === 'Enter') {
+    onSubmit();
+  }
+};
 
 // PAGE BUTTON CONTROL:
 const onMain = () => {
@@ -184,7 +190,7 @@ const onOpen =()=>{
       <LoginBox style={access ? {display: 'none'} : {display: 'flex'}}>
         <h3>아이디와 비밀번호를 입력해주세요</h3>
         <LoginInput type='text' onChange={onId} placeholder='아이디'/>
-        <LoginInput type='password' onChange={onPassword} placeholder='비밀번호'/>
+        <LoginInput type='password' onChange={onPassword} placeholder='비밀번호' onKeyPress={onKeyPress}/>
         <LoginBtn onClick={onSubmit}>DB 보기</LoginBtn>
       </LoginBox>
 
@@ -205,19 +211,36 @@ const onOpen =()=>{
         </Sidebar>
         }
       {access&& <Icon.Menu onClick={onOpen}/>}
-      {access &&
-          <BtnBox>
-            <Btn margin='10px 20px 10px 0' onClick={onMain} style={mainPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
-            {/* <Btn margin='10px 20px 10px 0' onClick={onPayment} style={userPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>결제 내역</Btn>
-            <Btn margin='10px 20px 10px 0' onClick={onEmail} style={emailPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일</Btn> */}
-            {/* <Btn margin='10px 20px 10px 0' onClick={onSend} style={emailSendPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일보내기</Btn> */}
-            {/* <Btn margin='10px 20px 10px 0' onClick={onSms} style={smsPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메시지</Btn> */}
-            <Btn margin='10px 20px 10px 0' onClick={onMember} style={memberPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
-            <Btn margin='10px 20px 10px 0' onClick={onContol} style={controlPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>설정</Btn>
-            <Btn margin='10px 20px 10px 0' onClick={onManage} style={managePage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
-            <Btn margin='10px 20px 10px 0' onClick={onReser} style={reserPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>            
+
+      {access && userInfo && (
+        <div>
+          {/* 로그인 사용자에 따라 다른 메뉴를 보여줌 */}
+          {userInfo.name === 'admin' && (
+            // admin 계정 메뉴
+            <BtnBox>
+              <Btn margin='10px 20px 10px 0' onClick={onMain} style={mainPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onPayment} style={userPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>결제 내역</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onEmail} style={emailPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onSend} style={emailSendPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일보내기</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onSms} style={smsPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메시지</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onMember} style={memberPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onContol} style={controlPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>설정</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onManage} style={managePage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onReser} style={reserPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>  
+            </BtnBox>
+         )}
+          {userInfo.name === 'manager' && (
+            // 일반 사용자 계정 메뉴
+            <BtnBox>
+              <Btn margin='10px 20px 10px 0' onClick={onMain} style={mainPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onMember} style={memberPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onContol} style={controlPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>설정</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onManage} style={managePage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onReser} style={reserPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>           
           </BtnBox>
-      }
+          )}
+        </div>
+      )}
       {access && mainPage && <MainAnalytics />}
       {access && userPage && <PaymentList/>}
       {access && emailPage && <EmailList/>}
