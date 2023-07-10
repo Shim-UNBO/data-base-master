@@ -1,0 +1,26 @@
+body {
+  margin: 0;
+  
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.sidebar{
+  right: -100%;
+  transition: all 0.3s;
+}
+.sidebar-active{
+  right:10px;
+  transition: all 0.3s;
+
+}
+.closeBtn{
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+}
