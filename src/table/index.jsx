@@ -52,6 +52,8 @@ const TablePage = () => {
       // 회원 정보 확인 결과에 따라 로그인 처리
       if (data.statusCodeValue !== 400) {
         localStorage.setItem('category',data.category);
+        localStorage.setItem('name',data.name);
+        localStorage.setItem('mainId',data.email);
         setUserInfo(data); // 사용자 정보 저장
         setAccess(true);
       } else {
@@ -199,15 +201,28 @@ const onOpen =()=>{
           <CloseWrap>
             <Icon.Close onClick={()=>{setOpen(false)}}/>
           </CloseWrap>
-          <Btn margin='10px 20px 10px 0' onClick={onMain} style={mainPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
-          {/* <Btn margin='10px 20px 10px 0' onClick={onPayment} style={userPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>결제 내역</Btn>
-          <Btn margin='10px 20px 10px 0' onClick={onEmail} style={emailPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일</Btn> */}
-          {/* <Btn margin='10px 20px 10px 0' onClick={onSend} style={emailSendPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일보내기</Btn> */}
-          {/* <Btn margin='10px 20px 10px 0' onClick={onSms} style={smsPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메시지</Btn> */}
-          <Btn margin='10px 20px 10px 0' onClick={onMember} style={memberPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
-          <Btn margin='10px 20px 10px 0' onClick={onContol} style={controlPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>설정</Btn>
-          <Btn margin='10px 20px 10px 0' onClick={onManage} style={managePage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
-          <Btn margin='10px 20px 10px 0' onClick={onReser} style={reserPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>
+          {userInfo.name === 'admin' && (
+            <>
+            <Btn margin='10px 20px 10px 0' onClick={onMain} style={mainPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
+            <Btn margin='10px 20px 10px 0' onClick={onPayment} style={userPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>결제 내역</Btn>
+            <Btn margin='10px 20px 10px 0' onClick={onEmail} style={emailPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일</Btn>
+            <Btn margin='10px 20px 10px 0' onClick={onSms} style={smsPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메시지</Btn>
+            <Btn margin='10px 20px 10px 0' onClick={onMember} style={memberPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
+            <Btn margin='10px 20px 10px 0' onClick={onContol} style={controlPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>설정</Btn>
+            <Btn margin='10px 20px 10px 0' onClick={onManage} style={managePage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
+            <Btn margin='10px 20px 10px 0' onClick={onReser} style={reserPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>
+            </>
+          )}
+          {userInfo.name === 'manager' && (
+            // 일반 사용자 계정 메뉴
+            <>
+              <Btn margin='10px 20px 10px 0' onClick={onMain} style={mainPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onMember} style={memberPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onContol} style={controlPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>설정</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onManage} style={managePage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onReser} style={reserPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>           
+              </>
+          )}
         </Sidebar>
         }
       {access&& <Icon.Menu onClick={onOpen}/>}
@@ -221,7 +236,7 @@ const onOpen =()=>{
               <Btn margin='10px 20px 10px 0' onClick={onMain} style={mainPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
               <Btn margin='10px 20px 10px 0' onClick={onPayment} style={userPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>결제 내역</Btn>
               <Btn margin='10px 20px 10px 0' onClick={onEmail} style={emailPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={onSend} style={emailSendPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일보내기</Btn>
+              {/* <Btn margin='10px 20px 10px 0' onClick={onSend} style={emailSendPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일보내기</Btn> */}
               <Btn margin='10px 20px 10px 0' onClick={onSms} style={smsPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메시지</Btn>
               <Btn margin='10px 20px 10px 0' onClick={onMember} style={memberPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
               <Btn margin='10px 20px 10px 0' onClick={onContol} style={controlPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>설정</Btn>
