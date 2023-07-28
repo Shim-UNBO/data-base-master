@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import{Main, Head, HeadText, Body, BodyText, BodyWrap, Btn} from '../table/style'
+import{Main, Head, HeadText, Body, BodyText, BodyWrap, Btn,LoginInput} from '../table/style'
 import SubscripPage from './SubscribeInfo';
 import SendingPage from './SendingPage';
 import Modal from 'react-modal'; // react-modal import
@@ -26,6 +26,7 @@ const MemberList = () => {
     inputDcrp: '',
   });
   const category = localStorage.getItem('category');
+  const [searchKeyword, setSearchKeyword] = useState('');
 // 셀렉트 박스의 선택된 분류 값을 저장할 상태
   // MEMBER DATA :
   useEffect(() => {
@@ -101,39 +102,36 @@ const onSendList = () => {
   const updateMember = (index, category, dcrp) => {
     const user = memberList[index];
     const mainId = localStorage.getItem('mainId');
-  console.log(user);    // 로그인한 아이디와 매니저가 같은지 확인
-    if (user.manager === mainId||user.manager===null) {
-      axios
-        .post('https://api.mever.me:8080/member/updateInfo', {
-          email: user.email,
-          phone: user.phone,
-          progress: category,
-          manager: mainId,
-          dcrp:dcrp+'\r\n'+getCurrentDateTimeString(),
-        })
-        .then((response) => {
-          // 성공적으로 서버로 데이터를 전송한 후에 수행할 작업을 처리합니다.
-          alert('저장되었습니다.');
-          // 수정된 데이터로 업데이트
-           setMemberList((prevList) =>
-          prevList.map((item, idx) => (idx === index
-            ? {
-              ...item,
-              selectedCategory: category,
-              inputDcrp: dcrp
+  
+    return new Promise((resolve, reject) => {
+      if (user.manager === mainId || user.manager === null) {
+        axios
+          .post(
+            'https://api.mever.me:8080/member/updateInfo',
+            {
+              email: user.email,
+              phone: user.phone,
+              progress: category,
+              manager: mainId,
+              dcrp: dcrp,
+              category: localStorage.getItem('category'),
             }
-            : item
-          ))
-        );
-        closeModal(); // 모달 창 닫기
-        })
-        .catch((error) => {
-          // 데이터 전송 실패시 에러 처리를 해줄 수 있습니다.
-          console.error('데이터 전송 실패:', error);
-        });
-    } else {
-      alert('권한이 없습니다.'); // 권한이 없을 때에는 알림을 띄웁니다.
-    }
+          )
+          .then((response) => {
+            // 성공적으로 서버에 저장한 경우
+            console.log('서버 응답 데이터:', response.data);
+            resolve(); // Promise를 resolve하여 성공했음을 알립니다.
+          })
+          .catch((error) => {
+            // 데이터 전송 실패시 에러 처리를 해줄 수 있습니다.
+            console.error('데이터 전송 실패:', error);
+            reject(error); // Promise를 reject하여 실패했음을 알립니다.
+          });
+      } else {
+        alert('권한이 없습니다.');
+        reject('권한이 없습니다.'); // Promise를 reject하여 실패했음을 알립니다.
+      }
+    });
   };
     // 모달 창 열기
     const openModal = (index) => {
@@ -152,23 +150,34 @@ const onSendList = () => {
     const { name, value } = e.target;
     setModalData((prevData) => ({ ...prevData, [name]: value }));
   };
+  const saveChanges = () => {
+    if (selectUser !== null) {
+      const { name, phone, selectedCategory, inputDcrp } = modalData;
+      const updatedDcrp = inputDcrp + '\r\n' + getCurrentDateTimeString();
+  
+      updateMember(selectUser, selectedCategory, updatedDcrp);
+  
+      // 모달 창 닫기
+      setIsModalOpen(false);
+  
+      // 데이터 업데이트
+      setMemberList((prevList) =>
+        prevList.map((item, idx) =>
+          idx === selectUser
+            ? {
+                ...item,
+                progress: selectedCategory,
+                dcrp: updatedDcrp, // 업데이트된 dcrp 값을 설정합니다.
+                manager:localStorage.getItem("mainId"),
+              }
+            : item
+        )
+      );
+    }
+  };
     // 모달 창 닫기
     const closeModal = () => {
       setIsModalOpen(false);
-      axios
-      .post('https://api.mever.me:8080/member/list', null, {
-        params: {
-          email: '',
-          category: category,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setMemberList(response.data);
-      })
-      .catch((error) => {
-        console.error('데이터를 불러오는 중 에러 발생:', error);
-      });
     };
     const getCurrentDateTimeString = () => {
       const now = new Date();
@@ -181,25 +190,6 @@ const onSendList = () => {
       return `${year}-${month}-${day} ${hours}:${minutes}`;
     };
     
-  // 원래 테이블의 데이터를 다시 불러오는 useEffect
-  // useEffect(() => {
-  //   if (!isModalOpen) {
-  //     axios
-  //       .post('https://api.mever.me:8080/member/list', null, {
-  //         params: {
-  //           email: '',
-  //           category: category,
-  //         },
-  //       })
-  //       .then((response) => {
-  //         console.log(response.data);
-  //         setMemberList(response.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error('데이터를 불러오는 중 에러 발생:', error);
-  //       });
-  //   }
-  // }, [isModalOpen, category]);
   const downloadExcel = () => {
     const sortedMemberList = [...memberList].sort((a, b) => new Date(b.regdate) - new Date(a.regdate));
 
@@ -226,8 +216,34 @@ const onSendList = () => {
     // 엑셀 파일로 저장
     XLSX.writeFile(workbook, 'member.xlsx');
   };
+   // 검색어 입력 시 실행되는 이벤트 핸들러
+   const handleSearch = (e) => {
+    const { value } = e.target;
+    setSearchKeyword(value);
+  };
+
+  // 회원 목록을 검색어에 따라 필터링하는 함수
+  const filterMembers = (members) => {
+    if (!searchKeyword) {
+      return members;
+    }
+    const keyword = searchKeyword.toLowerCase();
+    return members.filter(
+      (member) =>
+        (member.name?.toLowerCase().includes(keyword) || false) ||
+        (member.email?.toLowerCase().includes(keyword) || false) ||
+        (member.phone?.toLowerCase().includes(keyword) || false) ||
+        (member.dcrp?.toLowerCase().includes(keyword) || false) ||
+        (member.manager?.toLowerCase().includes(keyword) || false) ||
+        (member.progress?.toLowerCase().includes(keyword) || false) ||
+        (member.regdate?.toLowerCase().includes(keyword) || false)
+    );
+  };
 return (
   <>
+        {localStorage.getItem('category') === '/modelhouse1/' && (
+            <LoginInput type="text" value={searchKeyword} onChange={handleSearch} placeholder="검색어를 입력하세요" />
+      )}
       <Btn  onClick={onSendList}>이메일 보내기</Btn>
       {localStorage.getItem('category') === '/modelhouse1/' && (
         <Btn onClick={downloadExcel}>엑셀 다운로드</Btn>
@@ -235,6 +251,7 @@ return (
     <Main>
     <Head>
         {localStorage.getItem('category') === '/modelhouse1/' ? (
+    
           <>
             <HeadText flex='.4'>선택</HeadText>
             <HeadText>일자</HeadText>
@@ -245,6 +262,7 @@ return (
             <HeadText>내용</HeadText>
             <HeadText>담당자</HeadText>
             <HeadText>저장</HeadText>
+        
           </>
         ) : (
           <>
@@ -259,7 +277,7 @@ return (
         )}
       </Head>
         <BodyWrap>
-          {memberList.map((list, index)=>{
+          {filterMembers(memberList).map((list, index)=>{
           
             if (localStorage.getItem('category') === '/modelhouse1/' ){
               return (
@@ -358,7 +376,8 @@ return (
       style={{ height: '120px', resize: 'none' }} // textarea의 높이를 조정하고 resize를 막습니다
     />
   </div>
-  <button onClick={() => updateMember(selectUser, modalData.selectedCategory, modalData.inputDcrp)}>저장</button>
+  {/* <button onClick={() => updateMember(selectUser, modalData.selectedCategory, modalData.inputDcrp)}>저장</button> */}
+  <button onClick={saveChanges}>저장</button>
   <button onClick={closeModal}>닫기</button>
 </Modal>
       {uniquePage && <SubscripPage uniqueData = {uniqueData} userIndex ={selectUser} setClose ={setUniquePage}/>}
