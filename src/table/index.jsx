@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { Btn, BtnBox, CloseWrap, Container, Icon, LoginBox, LoginBtn, LoginInput, Sidebar } from './style'
 import PaymentList from '../components/PaymentList'
 import EmailList from '../components/EmailList'
@@ -10,22 +11,33 @@ import Management from '../components/ManagementPage'
 import ReservationList from '../components/ReservationList'
 import axios from 'axios'
 
+const PAGES = {
+  MAIN: 'main',
+  PAYMENT: 'payment',
+  EMAIL: 'email',
+  EMAIL_SEND: 'emailSend',
+  SMS: 'sms',
+  MEMBER: 'member',
+  CONTROL: 'control',
+  MANAGEMENT: 'management',
+  RESERVATION: 'reservation',
+  SALES:'sales'
+};
+
 const TablePage = () => {
-// PAGES' DISPLAY STATES : 
-  const [access, setAccess] = useState(false)
-  const [userPage, setUserPage] = useState(false)
-  const [mainPage, setMainPage] = useState(true)
-  const [emailPage, setEmailPage] = useState(false)
-  const [emailSendPage, setEmailSendPage] = useState(false)
-  const [smsPage, setSmsPage] = useState(false)
-  const [memberPage, setMemberPage] = useState(false)
-  const [subPage, setSubPage] = useState(false)
-  const [id, setId] = useState('')
-  const [password, setPassword] = useState('')
-  const [controlPage, setControlPage] = useState(false)
-  const [managePage, setManagePage] = useState(false)
-  const [reserPage, setReserPage] = useState(false)
-  const [userInfo, setUserInfo] = useState(null); 
+  const [access, setAccess] = useState(false);
+  const [currentPage, setCurrentPage] = useState(PAGES.MAIN);
+  const [id, setId] = useState('');
+  const [password, setPassword] = useState('');
+  const [userInfo, setUserInfo] = useState(null);
+
+  const onId = (e) => setId(e.target.value);
+  const onPassword = (e) => setPassword(e.target.value);
+  const onKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      onSubmit();
+    }
+  };
   // SUBSCRIPTION BUTTON STATES :
 
   // SEARCH STATES:
@@ -33,12 +45,7 @@ const TablePage = () => {
   // const [searchValue, setSearchValue] = useState('');
 
   // LOGIN PAGE FUNCTIONS:
-  const onId = (e) => {
-    setId(e.target.value)
-  }
-  const onPassword = (e) => {
-    setPassword(e.target.value);
-  }
+
   const onSubmit = () => {
     // 서버와 통신하여 회원 정보 확인
     axios
@@ -48,7 +55,6 @@ const TablePage = () => {
     })
     .then(response => {
       const data = response.data;
-      console.log(data);
       // 회원 정보 확인 결과에 따라 로그인 처리
       if (data.statusCodeValue !== 400) {
         localStorage.setItem('category',data.category);
@@ -65,122 +71,8 @@ const TablePage = () => {
       // 에러 처리에 대한 추가로 실행할 코드 작성
     });
 };
-const onKeyPress = (e) => {
-  if (e.key === 'Enter') {
-    onSubmit();
-  }
-};
 
-// PAGE BUTTON CONTROL:
-const onMain = () => {
-  setUserPage(false)
-  setEmailPage(false)
-  setSmsPage(false)
-  setMemberPage(false)
-  setEmailSendPage(false)
-  setMainPage(true)
-  setControlPage(false)
-  setOpen(false)
-  setManagePage(false)
-  setReserPage(false)
-};
-const onPayment = () => {
-  setUserPage(true)
-  setEmailPage(false)
-  setSmsPage(false)
-  setMemberPage(false)
-  setEmailSendPage(false)
-  setMainPage(false)
-  setControlPage(false)
-  setOpen(false)
-  setManagePage(false)
-  setReserPage(false)
-};
-const onEmail = () => {
-  setUserPage(false)
-  setEmailPage(true)
-  setSmsPage(false)
-  setMemberPage(false)
-  setEmailSendPage(false)
-  setMainPage(false)
-  setControlPage(false)
-  setOpen(false)
-  setManagePage(false)
-  setReserPage(false)
-};
-const onSend = () => {
-  setUserPage(false)
-  setEmailSendPage(true)
-  setEmailPage(false)
-  setSmsPage(false)
-  setMemberPage(false)
-  setSubPage(false)
-  setMainPage(false)
-  setControlPage(false)
-  setOpen(false)
-  setManagePage(false)
-  setReserPage(false)
-};
-const onSms = () => {
-  setUserPage(false)
-  setEmailPage(false)
-  setSmsPage(true)
-  setMemberPage(false)
-  setEmailSendPage(false)
-  setMainPage(false)
-  setControlPage(false)
-  setOpen(false)
-  setManagePage(false)
-  setReserPage(false)
-};
-const onMember = () => {
-  setUserPage(false)
-  setEmailPage(false)
-  setSmsPage(false)
-  setMemberPage(true)
-  setEmailSendPage(false)
-  setMainPage(false)
-  setControlPage(false)
-  setOpen(false)
-  setManagePage(false)
-  setReserPage(false)
-};
-const onContol = () => {
-  setUserPage(false)
-  setEmailPage(false)
-  setSmsPage(false)
-  setMemberPage(false)
-  setEmailSendPage(false)
-  setMainPage(false)
-  setControlPage(true)
-  setOpen(false)
-  setManagePage(false)
-  setReserPage(false)
-};
-const onManage = () => {
-  setUserPage(false)
-  setEmailPage(false)
-  setSmsPage(false)
-  setMemberPage(false)
-  setEmailSendPage(false)
-  setMainPage(false)
-  setControlPage(false)
-  setOpen(false)
-  setReserPage(false)
-  setManagePage(true)
-}
-const onReser = () => {
-  setReserPage(true)
-  setUserPage(false)
-  setEmailPage(false)
-  setSmsPage(false)
-  setMemberPage(false)
-  setSubPage(false)
-  setEmailSendPage(false)
-  setMainPage(false)
-  setManagePage(false)
-  setControlPage(false)
-};
+const onPageChange = (page) => setCurrentPage(page);
 
 const [open, setOpen] = useState(false)
 const onOpen =()=>{
@@ -203,24 +95,25 @@ const onOpen =()=>{
           </CloseWrap>
           {userInfo.name === 'admin' && (
             <>
-            <Btn margin='10px 20px 10px 0' onClick={onMain} style={mainPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
-            <Btn margin='10px 20px 10px 0' onClick={onPayment} style={userPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>결제 내역</Btn>
-            <Btn margin='10px 20px 10px 0' onClick={onEmail} style={emailPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일</Btn>
-            <Btn margin='10px 20px 10px 0' onClick={onSms} style={smsPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메시지</Btn>
-            <Btn margin='10px 20px 10px 0' onClick={onMember} style={memberPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
-            <Btn margin='10px 20px 10px 0' onClick={onContol} style={controlPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>설정</Btn>
-            <Btn margin='10px 20px 10px 0' onClick={onManage} style={managePage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
-            <Btn margin='10px 20px 10px 0' onClick={onReser} style={reserPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>
+            <Btn margin='10px 20px 10px 0'onClick={() => onPageChange(PAGES.MAIN)} style={currentPage === PAGES.MAIN ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
+            <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.PAYMENT)} style={currentPage === PAGES.PAYMENT ? {color:'#000', background: 'coral'} : {color: '#fff'}}>결제 내역</Btn>
+            <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.EMAIL)} style={currentPage === PAGES.EMAIL ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일</Btn>
+            <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.SMS)} style={currentPage === PAGES.SMS ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메시지</Btn>
+            <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MEMBER)} style={currentPage === PAGES.MEMBER ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
+            <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.CONTROL)} style={currentPage === PAGES.CONTROL ? {color:'#000', background: 'coral'} : {color: '#fff'}}>타이틀 변경</Btn>
+            <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MANAGEMENT)} style={currentPage === PAGES.MANAGEMENT ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
+            <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.RESERVATION)} style={currentPage === PAGES.RESERVATION ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>
+            <Link to="/sales"><Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.SALES)} style={currentPage === PAGES.SALES ? {color:'#000', background: 'coral'} : {color: '#fff'}}>영업 관리</Btn></Link>
             </>
           )}
           {userInfo.name === 'manager' && (
             // 일반 사용자 계정 메뉴
             <>
-              <Btn margin='10px 20px 10px 0' onClick={onMain} style={mainPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={onMember} style={memberPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={onContol} style={controlPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>설정</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={onManage} style={managePage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={onReser} style={reserPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>           
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MAIN)} style={currentPage === PAGES.MAIN ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MEMBER)} style={currentPage === PAGES.MEMBER ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.CONTROL)} style={currentPage === PAGES.CONTROL ? {color:'#000', background: 'coral'} : {color: '#fff'}}>타이틀 변경</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MANAGEMENT)} style={currentPage === PAGES.MANAGEMENT ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.RESERVATION)} style={currentPage === PAGES.RESERVATION ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>           
               </>
           )}
         </Sidebar>
@@ -233,37 +126,39 @@ const onOpen =()=>{
           {userInfo.name === 'admin' && (
             // admin 계정 메뉴
             <BtnBox>
-              <Btn margin='10px 20px 10px 0' onClick={onMain} style={mainPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={onPayment} style={userPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>결제 내역</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={onEmail} style={emailPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MAIN)} style={currentPage === PAGES.MAIN ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.PAYMENT)} style={currentPage === PAGES.PAYMENT ? {color:'#000', background: 'coral'} : {color: '#fff'}}>결제 내역</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.EMAIL)} style={currentPage === PAGES.EMAIL ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일</Btn>
               {/* <Btn margin='10px 20px 10px 0' onClick={onSend} style={emailSendPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일보내기</Btn> */}
-              <Btn margin='10px 20px 10px 0' onClick={onSms} style={smsPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메시지</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={onMember} style={memberPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={onContol} style={controlPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>설정</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={onManage} style={managePage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={onReser} style={reserPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>  
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.SMS)} style={currentPage === PAGES.SMS ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메시지</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MEMBER)} style={currentPage === PAGES.MEMBER ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
+              <Btn margin='10px 20px 10px 0'onClick={() => onPageChange(PAGES.CONTROL)} style={currentPage === PAGES.CONTROL ? {color:'#000', background: 'coral'} : {color: '#fff'}}>타이틀 변경</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MANAGEMENT)} style={currentPage === PAGES.MANAGEMENT ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.RESERVATION)} style={currentPage === PAGES.RESERVATION ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>  
+              <Link to="/sales"  style={{ textDecoration: "none" }}><Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.SALES)} style={currentPage === PAGES.SALES ? {color:'#000', background: 'coral'} : {color: '#fff'}}>영업 관리</Btn></Link>
             </BtnBox>
          )}
           {userInfo.name === 'manager' && (
             // 일반 사용자 계정 메뉴
             <BtnBox>
-              <Btn margin='10px 20px 10px 0' onClick={onMain} style={mainPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={onMember} style={memberPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={onContol} style={controlPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>설정</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={onManage} style={managePage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={onReser} style={reserPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>           
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MAIN)} style={currentPage === PAGES.MAIN ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MEMBER)} style={currentPage === PAGES.MEMBER ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.CONTROL)} style={currentPage === PAGES.CONTROL ? {color:'#000', background: 'coral'} : {color: '#fff'}}>타이틀 변경</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MANAGEMENT)} style={currentPage === PAGES.MANAGEMENT ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.RESERVATION)} style={currentPage === PAGES.RESERVATION ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>           
           </BtnBox>
           )}
         </div>
       )}
-      {access && mainPage && <MainAnalytics />}
-      {access && userPage && <PaymentList/>}
-      {access && emailPage && <EmailList/>}
-      {access && smsPage && <SmsList/>}
-      {access && memberPage && <MemberList/>}
-      {access && controlPage && <ContolList/>}
-      {access && managePage && <Management/>}
-      {access && reserPage && <ReservationList/>}
+      {access && currentPage === PAGES.MAIN && <MainAnalytics />}
+      {access && currentPage === PAGES.PAYMENT && <PaymentList />}
+      {access && currentPage === PAGES.EMAIL && <EmailList />}
+      {access && currentPage === PAGES.SMS && <SmsList />}
+      {access && currentPage === PAGES.MEMBER && <MemberList />}
+      {access && currentPage === PAGES.CONTROL && <ContolList />}
+      {access && currentPage === PAGES.MANAGEMENT && <Management />}
+      {access && currentPage === PAGES.RESERVATION && <ReservationList />}
+    
     </Container>
   )
 }
