@@ -71,7 +71,9 @@ const TablePage = () => {
       // 에러 처리에 대한 추가로 실행할 코드 작성
     });
 };
-
+const onSales = () => {
+  window.location.href = 'https://www.mever.me/sales/';
+};
 const onPageChange = (page) => setCurrentPage(page);
 
 const [open, setOpen] = useState(false)
@@ -103,7 +105,7 @@ const onOpen =()=>{
             <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.CONTROL)} style={currentPage === PAGES.CONTROL ? {color:'#000', background: 'coral'} : {color: '#fff'}}>타이틀 변경</Btn>
             <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MANAGEMENT)} style={currentPage === PAGES.MANAGEMENT ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
             <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.RESERVATION)} style={currentPage === PAGES.RESERVATION ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>
-            <Link to="/sales"><Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.SALES)} style={currentPage === PAGES.SALES ? {color:'#000', background: 'coral'} : {color: '#fff'}}>영업 관리</Btn></Link>
+            <Btn margin='10px 20px 10px 0' onClick={onSales} style={currentPage === PAGES.SALES ? {color:'#000', background: 'coral'} : {color: '#fff'}}>영업 관리</Btn>
             </>
           )}
           {userInfo.name === 'manager' && (
@@ -135,7 +137,7 @@ const onOpen =()=>{
               <Btn margin='10px 20px 10px 0'onClick={() => onPageChange(PAGES.CONTROL)} style={currentPage === PAGES.CONTROL ? {color:'#000', background: 'coral'} : {color: '#fff'}}>타이틀 변경</Btn>
               <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MANAGEMENT)} style={currentPage === PAGES.MANAGEMENT ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
               <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.RESERVATION)} style={currentPage === PAGES.RESERVATION ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>  
-              <Link to="/sales"  style={{ textDecoration: "none" }}><Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.SALES)} style={currentPage === PAGES.SALES ? {color:'#000', background: 'coral'} : {color: '#fff'}}>영업 관리</Btn></Link>
+              <Btn margin='10px 20px 10px 0' onClick={onSales} style={currentPage === PAGES.SALES ? {color:'#000', background: 'coral'} : {color: '#fff'}}>영업 관리</Btn>
             </BtnBox>
          )}
           {userInfo.name === 'manager' && (
