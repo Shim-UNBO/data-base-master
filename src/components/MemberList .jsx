@@ -63,18 +63,18 @@ const onSubscribe = (index) => {
 
 // UNIQUE PAGE DATA :
 
-useEffect(() => { 
-  axios.post('https://api.mever.me:8080/subscription/list', null, {
-    email: inputEmail,
-    phone: inputPhone,
-  })
-  .then((response) => {
-    setUniqueData(response.data);
-  })
-    .catch((error) => {
-      console.error(error);
-    });
-}, [inputEmail,inputPhone]);
+// useEffect(() => { 
+//   axios.post('https://api.mever.me:8080/subscription/list', null, {
+//     email: inputEmail,
+//     phone: inputPhone,
+//   })
+//   .then((response) => {
+//     setUniqueData(response.data);
+//   })
+//     .catch((error) => {
+//       console.error(error);
+//     });
+// }, [inputEmail,inputPhone]);
 
 const onCheck = (index) => {
   setCheckedArr((prevArr) => {
@@ -253,6 +253,7 @@ return (
         {localStorage.getItem('category') === '/modelhouse1/' ? (
     
           <>
+            <HeadText>번호</HeadText>
             <HeadText flex='.4'>선택</HeadText>
             <HeadText>일자</HeadText>
             <HeadText>이름</HeadText>
@@ -266,6 +267,7 @@ return (
           </>
         ) : (
           <>
+            <HeadText>번호</HeadText>
             <HeadText flex='.4'>선택</HeadText>
             <HeadText>일자</HeadText>
             <HeadText>이름</HeadText>
@@ -282,6 +284,7 @@ return (
             if (localStorage.getItem('category') === '/modelhouse1/' ){
               return (
               <Body key={index} style={index % 2 === 0 ? {background: 'rgba(0, 0, 0, 0.05)'} : {background: 'white'}}>
+                <BodyText>{index+1}</BodyText>
                 <BodyText flex='.4'>
                   <input style={{width: '20px', height: '20px', cursor: 'pointer'}} type="checkbox" onChange={()=>{onCheck(index)}}/>
                 </BodyText> 
@@ -305,6 +308,7 @@ return (
             }else{
                 return(
 <Body key={index} style={index % 2 === 0 ? {background: 'rgba(0, 0, 0, 0.05)'} : {background: 'white'}}>
+                <BodyText>{index+1}</BodyText>
                 <BodyText flex='.4'>
                   <input style={{width: '20px', height: '20px', cursor: 'pointer'}} type="checkbox" onChange={()=>{onCheck(index)}}/>
                 </BodyText> 

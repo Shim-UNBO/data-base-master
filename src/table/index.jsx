@@ -9,6 +9,7 @@ import ContolList from '../components/ControlList'
 import MainAnalytics from '../components/MainAnalytics'
 import Management from '../components/ManagementPage'
 import ReservationList from '../components/ReservationList'
+import MenuControl from '../components/MenuControl'
 import axios from 'axios'
 
 const PAGES = {
@@ -21,7 +22,8 @@ const PAGES = {
   CONTROL: 'control',
   MANAGEMENT: 'management',
   RESERVATION: 'reservation',
-  SALES:'sales'
+  SALES:'sales',
+  MENUCONTROL:'menuControl'
 };
 
 const TablePage = () => {
@@ -60,6 +62,7 @@ const TablePage = () => {
         localStorage.setItem('category',data.category);
         localStorage.setItem('name',data.name);
         localStorage.setItem('mainId',data.email);
+        console.log(data);
         setUserInfo(data); // 사용자 정보 저장
         setAccess(true);
       } else {
@@ -118,6 +121,23 @@ const onOpen =()=>{
               <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.RESERVATION)} style={currentPage === PAGES.RESERVATION ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>           
               </>
           )}
+          {userInfo.name === 'master' && (
+            // 마스터 관리자 계정 메뉴
+            <BtnBox>
+              <BtnBox>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MAIN)} style={currentPage === PAGES.MAIN ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.PAYMENT)} style={currentPage === PAGES.PAYMENT ? {color:'#000', background: 'coral'} : {color: '#fff'}}>결제 내역</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.EMAIL)} style={currentPage === PAGES.EMAIL ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.SMS)} style={currentPage === PAGES.SMS ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메시지</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MEMBER)} style={currentPage === PAGES.MEMBER ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
+              <Btn margin='10px 20px 10px 0'onClick={() => onPageChange(PAGES.CONTROL)} style={currentPage === PAGES.CONTROL ? {color:'#000', background: 'coral'} : {color: '#fff'}}>타이틀 변경</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MANAGEMENT)} style={currentPage === PAGES.MANAGEMENT ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.RESERVATION)} style={currentPage === PAGES.RESERVATION ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onSales} style={currentPage === PAGES.SALES ? {color:'#000', background: 'coral'} : {color: '#fff'}}>영업 관리</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MENUCONTROL)} style={currentPage === PAGES.MENUCONTROL ? {color:'#000', background: 'coral'} : {color: '#fff'}}>사이트 설정</Btn>
+            </BtnBox>
+          </BtnBox>
+          )}
         </Sidebar>
         }
       {access&& <Icon.Menu onClick={onOpen}/>}
@@ -136,7 +156,7 @@ const onOpen =()=>{
               <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MEMBER)} style={currentPage === PAGES.MEMBER ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
               <Btn margin='10px 20px 10px 0'onClick={() => onPageChange(PAGES.CONTROL)} style={currentPage === PAGES.CONTROL ? {color:'#000', background: 'coral'} : {color: '#fff'}}>타이틀 변경</Btn>
               <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MANAGEMENT)} style={currentPage === PAGES.MANAGEMENT ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
-              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.RESERVATION)} style={currentPage === PAGES.RESERVATION ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>  
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.RESERVATION)} style={currentPage === PAGES.RESERVATION ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>
               <Btn margin='10px 20px 10px 0' onClick={onSales} style={currentPage === PAGES.SALES ? {color:'#000', background: 'coral'} : {color: '#fff'}}>영업 관리</Btn>
             </BtnBox>
          )}
@@ -150,6 +170,23 @@ const onOpen =()=>{
               <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.RESERVATION)} style={currentPage === PAGES.RESERVATION ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>           
           </BtnBox>
           )}
+          {userInfo.name === 'master' && (
+            // 마스터 관리자 계정 메뉴
+            <BtnBox>
+              <BtnBox>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MAIN)} style={currentPage === PAGES.MAIN ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메인</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.PAYMENT)} style={currentPage === PAGES.PAYMENT ? {color:'#000', background: 'coral'} : {color: '#fff'}}>결제 내역</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.EMAIL)} style={currentPage === PAGES.EMAIL ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.SMS)} style={currentPage === PAGES.SMS ? {color:'#000', background: 'coral'} : {color: '#fff'}}>메시지</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MEMBER)} style={currentPage === PAGES.MEMBER ? {color:'#000', background: 'coral'} : {color: '#fff'}}>고객</Btn>
+              <Btn margin='10px 20px 10px 0'onClick={() => onPageChange(PAGES.CONTROL)} style={currentPage === PAGES.CONTROL ? {color:'#000', background: 'coral'} : {color: '#fff'}}>타이틀 변경</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MANAGEMENT)} style={currentPage === PAGES.MANAGEMENT ? {color:'#000', background: 'coral'} : {color: '#fff'}}>상품 관리</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.RESERVATION)} style={currentPage === PAGES.RESERVATION ? {color:'#000', background: 'coral'} : {color: '#fff'}}>예약 관리</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={onSales} style={currentPage === PAGES.SALES ? {color:'#000', background: 'coral'} : {color: '#fff'}}>영업 관리</Btn>
+              <Btn margin='10px 20px 10px 0' onClick={() => onPageChange(PAGES.MENUCONTROL)} style={currentPage === PAGES.MENUCONTROL ? {color:'#000', background: 'coral'} : {color: '#fff'}}>사이트 설정</Btn>
+            </BtnBox>
+          </BtnBox>
+          )}
         </div>
       )}
       {access && currentPage === PAGES.MAIN && <MainAnalytics />}
@@ -160,6 +197,7 @@ const onOpen =()=>{
       {access && currentPage === PAGES.CONTROL && <ContolList />}
       {access && currentPage === PAGES.MANAGEMENT && <Management />}
       {access && currentPage === PAGES.RESERVATION && <ReservationList />}
+      {access && currentPage === PAGES.MENUCONTROL && <MenuControl />}
     
     </Container>
   )
