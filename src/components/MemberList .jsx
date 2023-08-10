@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import{Main, Head, HeadText, Body, BodyText, BodyWrap, Btn,LoginInput} from '../table/style'
 import SubscripPage from './SubscribeInfo';
@@ -6,6 +6,8 @@ import SendingPage from './SendingPage';
 import Modal from 'react-modal'; // react-modal import
 import './modalStyles.css'; // 추가한 CSS 파일을 불러옵니다.
 import * as XLSX from 'xlsx';
+import { useCookies } from 'react-cookie'
+
 const MemberList = () => {
   const [memberList, setMemberList] = useState([]);
   const [selectUser, setSelectUser] = useState()
@@ -25,16 +27,60 @@ const MemberList = () => {
     selectedCategory: '',
     inputDcrp: '',
   });
-  const category = localStorage.getItem('category');
+  const category = useRef(null);
   const [searchKeyword, setSearchKeyword] = useState('');
-// 셀렉트 박스의 선택된 분류 값을 저장할 상태
+  const [selectedValue, setSelectedValue] = useState('');
+  const [cookies, setCookie, removeCookie] = useCookies(['id']);
+  const newJeans = cookies.id === 'true';
+
+  
+  const handleSelectChange = (event) => {
+    setSelectedValue(event.target.value); // 선택된 값 업데이트
+  };
+
+  //전체선택 기능 
+  const handleSelectAll = () => {
+    const allIndices = memberList.map((_, index) => index);
+    allIndices.forEach((index) => {
+        const checkbox = document.querySelector(`.checkbox-${index}`);
+        checkbox.checked = !checkbox.checked; // 선택 상태를 토글
+    });
+    setCheckedArr(allIndices);
+  };
+  //카테고리 변경 시 전체 체크 해제 후 데이터 가져오기
+  const handleButtonClick = () => {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+    if (selectedValue) {
+      category.current = selectedValue;
+      fetchData(selectedValue); // 선택된 값으로 데이터를 가져오는 함수 호출
+    }
+  };
+  const fetchData = (selectedCategory) => {
+    axios
+      .post('https://api.mever.me:8080/member/list', null, {
+        params: {
+          category: selectedCategory,
+        },
+      })
+      .then((response) => {
+        setMemberList(response.data.filter((member) => member.adminYn !== 'Y'));
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  };
+  // 셀렉트 박스의 선택된 분류 값을 저장할 상태
   // MEMBER DATA :
   useEffect(() => {
+    category.current = localStorage.getItem('category');
     axios
       .post('https://api.mever.me:8080/member/list', null, {
         params: {
           email: '',
-          category: category,
+          category: category.current,
         },
       })
       .then((response) => {
@@ -52,7 +98,6 @@ const onSubscribe = (index) => {
   setSelectUser(index);
   setInputEmail(memberList[index]?.email);
   setInputPhone(memberList[index]?.phone);
-
 }
 // SEND EMAIL BTN FUNCTION:
 // const onSendEmail = (index) => {
@@ -111,10 +156,10 @@ const onSendList = () => {
             {
               email: user.email,
               phone: user.phone,
-              progress: category,
+              progress: category.current,
               manager: mainId,
               dcrp: dcrp,
-              category: localStorage.getItem('category'),
+              category: category.current,
             }
           )
           .then((response) => {
@@ -241,16 +286,54 @@ const onSendList = () => {
   };
 return (
   <>
-        {localStorage.getItem('category') === '/modelhouse1/' && (
+   {newJeans && (
+    <div>
+      <select value={selectedValue} onChange={handleSelectChange}>
+        <option value=''>사이트 별 고객 리스트 ↓</option>
+        <option value='/art1/'>청담 갤러리1부(단체전)</option>
+        <option value='/art2/'>청담 갤러리2부(단체전)</option>
+        <option value='/art3/'>남산 갤러리(김미영 작가)</option>
+        <option value='/cafe1/'>선릉 카페(대단한 커피)</option>
+        <option value='/hospital1/'>강남병원 (지인 병원)</option>
+        <option value='/office1/'>법인 빌딩 (삼익영농)</option>
+        <option value='/academy1/'>강남 학원 (영어 학원)</option>
+        <option value='/art4/'>종로 갤러리2(백영희작가)</option>
+        <option value='/mart1/'>편의점</option>
+        <option value='/antique1/'>대전아트아카데미</option>
+        <option value='/cafe2/'>대전자산협회</option>
+        <option value='/parking1/'>부천재건축단지</option>
+        <option value='/rebuilding1/'>부천 대진아파트</option>
+        <option value='/hall1/'>부산벡스코</option>
+        <option value='/building2/'>수원 관공서</option>
+        <option value='/warship1/'>용산 전쟁 기념관</option>
+        <option value='/academy2/'>고려직업전문학교</option>
+        <option value='/academy3/'>고려직업전문학교3</option>
+        <option value='/academy4/'>아카데미4</option>
+        <option value='/academy5/'>아카데미5</option>
+        <option value='/office2/'>크럼플 오피스</option>
+        <option value='/studio1/'>스튜디오</option>
+        <option value='/hall2/'>부산벡스코2</option>
+        <option value='/machine1/'>벡스코/수원관공서</option>
+        <option value='/kpop1/'>BTS 초콜릿</option>
+        <option value='/modelhouse2/'>3D 신촌 빌리브 디 에이블</option>
+        <option value='/antique2/'>서울 감정평가원</option>
+        <option value='/pub1/'>앤티크 펍(미자살롱)</option>
+        <option value='/modelhouse1/'>3D 신촌 빌리브 디 에이블</option>
+      </select>
+      <button onClick={handleButtonClick}>전송</button>
+    </div>
+      )}
+      <button onClick={handleSelectAll}> 전체 선택 </button>
+        {category.current === '/modelhouse1/' && (
             <LoginInput type="text" value={searchKeyword} onChange={handleSearch} placeholder="검색어를 입력하세요" />
       )}
       <Btn  onClick={onSendList}>이메일 보내기</Btn>
-      {localStorage.getItem('category') === '/modelhouse1/' && (
+      {category.current === '/modelhouse1/' && (
         <Btn onClick={downloadExcel}>엑셀 다운로드</Btn>
       )}
     <Main>
     <Head>
-        {localStorage.getItem('category') === '/modelhouse1/' ? (
+        {category.current === '/modelhouse1/' ? (
     
           <>
             <HeadText>번호</HeadText>
@@ -281,12 +364,12 @@ return (
         <BodyWrap>
           {filterMembers(memberList).map((list, index)=>{
           
-            if (localStorage.getItem('category') === '/modelhouse1/' ){
+            if (category.current === '/modelhouse1/' ){
               return (
               <Body key={index} style={index % 2 === 0 ? {background: 'rgba(0, 0, 0, 0.05)'} : {background: 'white'}}>
                 <BodyText>{index+1}</BodyText>
                 <BodyText flex='.4'>
-                  <input style={{width: '20px', height: '20px', cursor: 'pointer'}} type="checkbox" onChange={()=>{onCheck(index)}}/>
+                  <input className={`checkbox-${index}`} style={{width: '20px', height: '20px', cursor: 'pointer'}} type="checkbox" onChange={()=>{onCheck(index)}}/>
                 </BodyText> 
                 <BodyText>{list.regdate}</BodyText>
                 <BodyText>{list.name}</BodyText>
@@ -307,10 +390,10 @@ return (
               );
             }else{
                 return(
-<Body key={index} style={index % 2 === 0 ? {background: 'rgba(0, 0, 0, 0.05)'} : {background: 'white'}}>
+                <Body key={index} style={index % 2 === 0 ? {background: 'rgba(0, 0, 0, 0.05)'} : {background: 'white'}}>
                 <BodyText>{index+1}</BodyText>
                 <BodyText flex='.4'>
-                  <input style={{width: '20px', height: '20px', cursor: 'pointer'}} type="checkbox" onChange={()=>{onCheck(index)}}/>
+                  <input className={`checkbox-${index}`} style={{width: '20px', height: '20px', cursor: 'pointer'}} type="checkbox" onChange={()=>{onCheck(index)}}/>
                 </BodyText> 
                 <BodyText>{list.regdate}</BodyText>
                 <BodyText>{list.name}</BodyText>

@@ -44,7 +44,7 @@
 
 /* CSS for the popup */
 .popup {
-  color: #fff;
+  /* color: #fff; */
   position: fixed;
   top: 50%;
   left: 50%;
@@ -69,6 +69,7 @@
   font-size: 24px;
   font-weight: bold;
   margin: 0;
+  color: white;
 }
 
 .popup-content {
@@ -104,10 +105,11 @@
 }
 
 .key{
+  display: list-item;
   font-weight: bold;
-  border-right: 1px solid #fff; /* 텍스트와 값 사이에 border 추가 */
   padding-right: 10px; /* 텍스트와 값 사이 간격 주기 */
   margin-right: 10px; /* 텍스트와 값 사이 간격 주기 */
+  color: white;
 }
 
 .popup-content input[type="text"],

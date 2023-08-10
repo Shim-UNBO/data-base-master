@@ -1,17 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { CalendarContainer, Popup, ButtonContainer, Button,eventContainer,eventTitle,eventStatus,eventStatusPending,eventStatusApproved,eventStatusReject,eventTime,CloseButton  } from './mainStyle';
 import axios from 'axios';
-import closeBtn from "../assets/icons/close-img.png"
-
-// npm install @fullcalendar/react @fullcalendar/daygrid
+import closeBtn from "../assets/icons/close-img.png";
+import { useCookies } from 'react-cookie';
 
 const ReservationList = () => {
   const [events, setEvents] = useState([]);
-  const category = localStorage.getItem('category');
+  // const category = localStorage.getItem('category');
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [updatedReservationTime, setUpdatedReservationTime] = useState('');
+  const category = useRef(null);
+  const [selectedValue, setSelectedValue] = useState('');
+  const [cookies, setCookie, removeCookie] = useCookies(['id']);
+  const newJeans = cookies.id === 'true';
+  const handleSelectChange = (event) => {
+    setSelectedValue(event.target.value); // 선택된 값 업데이트
+  };
+
+  const handleButtonClick = () => {
+    if (selectedValue) {
+      category.current = selectedValue;
+      fetchData(selectedValue); // 선택된 값으로 데이터를 가져오는 함수 호출
+      const todayButton = document.querySelector('.fc-today-button');
+      if (todayButton) {
+        todayButton.click();
+      }
+    }
+  };
+  const fetchData = async (selectedValue) => {
+        const response = await axios.post('https://api.mever.me:8080/getReservation', {
+          category:selectedValue,
+        });
+        // console.log(response);
+        const formattedEvents = response.data.map((reservation) => ({
+          title: reservation.orderId,
+          start: reservation.reservationDate,
+          email: reservation.email,
+          status: reservation.status || 'Pending',
+          extendedProps: reservation,
+          name: reservation.memo,
+        }));
+        setEvents(formattedEvents);
+        console.log(formattedEvents);
+    };
+
 
   useEffect(() => {
     fetchEvents();
@@ -19,8 +53,9 @@ const ReservationList = () => {
 
   const fetchEvents = async () => {
     try {
+      category.current = localStorage.getItem('category');
       const response = await axios.post('https://api.mever.me:8080/getReservation', {
-        category,
+        category:localStorage.getItem('category'),
       });
       // console.log(response);
       const formattedEvents = response.data.map((reservation) => ({
@@ -51,7 +86,7 @@ const ReservationList = () => {
           status: 'approved',
           seq,
           orderId,
-          category
+          category:category.current
         });
         console.log('API response:', response.data);
         console.log('예약 확정:', selectedEvent.extendedProps);
@@ -72,7 +107,7 @@ const ReservationList = () => {
           status: 'reject',
           seq,
           orderId,
-          category
+          category:category.current
         });
         console.log('API response:', response.data);
         console.log('예약 취소:', selectedEvent.extendedProps);
@@ -116,6 +151,44 @@ const ReservationList = () => {
 
   }
   return (
+    <>
+    {newJeans && (
+    <div>
+      <select value={selectedValue} onChange={handleSelectChange}>
+        <option value=''>사이트 별 리스트 ↓</option>
+        <option value='/art1/'>청담 갤러리1부(단체전)</option>
+        <option value='/art2/'>청담 갤러리2부(단체전)</option>
+        <option value='/art3/'>남산 갤러리(김미영 작가)</option>
+        <option value='/cafe1/'>선릉 카페(대단한 커피)</option>
+        <option value='/hospital1/'>강남병원 (지인 병원)</option>
+        <option value='/office1/'>법인 빌딩 (삼익영농)</option>
+        <option value='/academy1/'>강남 학원 (영어 학원)</option>
+        <option value='/art4/'>종로 갤러리2(백영희작가)</option>
+        <option value='/mart1/'>편의점</option>
+        <option value='/antique1/'>대전아트아카데미</option>
+        <option value='/cafe2/'>대전자산협회</option>
+        <option value='/parking1/'>부천재건축단지</option>
+        <option value='/rebuilding1/'>부천 대진아파트</option>
+        <option value='/hall1/'>부산벡스코</option>
+        <option value='/building2/'>수원 관공서</option>
+        <option value='/warship1/'>용산 전쟁 기념관</option>
+        <option value='/academy2/'>고려직업전문학교</option>
+        <option value='/academy3/'>고려직업전문학교3</option>
+        <option value='/academy4/'>아카데미4</option>
+        <option value='/academy5/'>아카데미5</option>
+        <option value='/office2/'>크럼플 오피스</option>
+        <option value='/studio1/'>스튜디오</option>
+        <option value='/hall2/'>부산벡스코2</option>
+        <option value='/machine1/'>벡스코/수원관공서</option>
+        <option value='/kpop1/'>BTS 초콜릿</option>
+        <option value='/modelhouse2/'>3D 신촌 빌리브 디 에이블</option>
+        <option value='/antique2/'>서울 감정평가원</option>
+        <option value='/pub1/'>앤티크 펍(미자살롱)</option>
+        <option value='/modelhouse1/'>3D 신촌 빌리브 디 에이블</option>
+      </select>
+      <button onClick={handleButtonClick}>전송</button>
+    </div>
+      )}
     <CalendarContainer>
       <FullCalendar
         plugins={[dayGridPlugin]}
@@ -163,6 +236,7 @@ const ReservationList = () => {
         </Popup>
       )}
     </CalendarContainer>
+    </>
   );
 };
 

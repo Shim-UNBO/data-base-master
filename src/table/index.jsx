@@ -11,6 +11,7 @@ import Management from '../components/ManagementPage'
 import ReservationList from '../components/ReservationList'
 import MenuControl from '../components/MenuControl'
 import axios from 'axios'
+import { useCookies } from 'react-cookie'
 
 const PAGES = {
   MAIN: 'main',
@@ -27,12 +28,12 @@ const PAGES = {
 };
 
 const TablePage = () => {
+  const [cookies, setCookie] = useCookies(['id']);
   const [access, setAccess] = useState(false);
   const [currentPage, setCurrentPage] = useState(PAGES.MAIN);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [userInfo, setUserInfo] = useState(null);
-
   const onId = (e) => setId(e.target.value);
   const onPassword = (e) => setPassword(e.target.value);
   const onKeyPress = (e) => {
@@ -62,7 +63,11 @@ const TablePage = () => {
         localStorage.setItem('category',data.category);
         localStorage.setItem('name',data.name);
         localStorage.setItem('mainId',data.email);
-        console.log(data);
+        if (data.adminYn === "Y" && data.name === "master") {
+          setCookie('id','true');
+        }else{
+          setCookie('id','false');
+        }
         setUserInfo(data); // 사용자 정보 저장
         setAccess(true);
       } else {
@@ -198,7 +203,6 @@ const onOpen =()=>{
       {access && currentPage === PAGES.MANAGEMENT && <Management />}
       {access && currentPage === PAGES.RESERVATION && <ReservationList />}
       {access && currentPage === PAGES.MENUCONTROL && <MenuControl />}
-    
     </Container>
   )
 }
