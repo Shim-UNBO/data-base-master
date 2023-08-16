@@ -1,29 +1,29 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Head, HeadText, Body, InputContainer, Input, Btn } from './mainStyle'
-import axios from 'axios'
-import { Space, Main } from '../table/style'
-import { useCookies } from 'react-cookie'
+import React, { useState, useEffect, useRef } from 'react';
+import { Head, HeadText, Body, InputContainer, Input, Btn } from './mainStyle';
+import axios from 'axios';
+import { Space, Main } from '../table/style';
+import { useCookies } from 'react-cookie';
 
 const ContolList = () => {
-    const [mainTitle, setMainTitle] = useState('')
-    const [subTitle, setSubTitle] = useState('')
-    const [titleList, setTitleList] = useState([])
-    const [selectedTitle, setSelectedTitle] = useState(null)
-    const category = useRef(null)
+    const [mainTitle, setMainTitle] = useState('');
+    const [subTitle, setSubTitle] = useState('');
+    const [titleList, setTitleList] = useState([]);
+    const [selectedTitle, setSelectedTitle] = useState(null);
+    const category = useRef(null);
     // const category = localStorage.getItem('category');
-    const [selectedValue, setSelectedValue] = useState('')
-    const [cookies, setCookie, removeCookie] = useCookies(['id'])
-    const newJeans = cookies.id === 'true'
+    const [selectedValue, setSelectedValue] = useState('');
+    const [cookies, setCookie, removeCookie] = useCookies(['id']);
+    const newJeans = cookies.id === 'true';
     const handleSelectChange = (event) => {
-        setSelectedValue(event.target.value) // 선택된 값 업데이트
-    }
+        setSelectedValue(event.target.value); // 선택된 값 업데이트
+    };
 
     const handleButtonClick = () => {
         if (selectedValue) {
-            getTitle(selectedValue) // 선택된 값으로 데이터를 가져오는 함수 호출
-            category.current = selectedValue
+            getTitle(selectedValue); // 선택된 값으로 데이터를 가져오는 함수 호출
+            category.current = selectedValue;
         }
-    }
+    };
     const getTitle = async (selectedValue) => {
         try {
             const response = await axios.post(
@@ -31,27 +31,27 @@ const ContolList = () => {
                 {
                     category: selectedValue,
                 }
-            )
+            );
             if (response.data && response.data.length > 0) {
-                console.log(response.data)
-                setTitleList(response.data)
-                setMainTitle(response.data[0].title)
-                setSubTitle(response.data[0].subTitle)
+                console.log(response.data);
+                setTitleList(response.data);
+                setMainTitle(response.data[0].title);
+                setSubTitle(response.data[0].subTitle);
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
     const handleInputChange = (e) => {
         if (e.target.id === 'mainTitle') {
-            setMainTitle(e.target.value)
+            setMainTitle(e.target.value);
         } else if (e.target.id === 'subTitle') {
-            setSubTitle(e.target.value)
+            setSubTitle(e.target.value);
         }
-    }
+    };
     useEffect(() => {
-        fetchData()
-    }, [])
+        fetchData();
+    }, []);
     const fetchData = async () => {
         try {
             const response = await axios.post(
@@ -59,15 +59,15 @@ const ContolList = () => {
                 {
                     category: localStorage.getItem('category'),
                 }
-            )
+            );
             if (response.data && response.data.length > 0) {
-                console.log(response.data)
-                setTitleList(response.data)
+                console.log(response.data);
+                setTitleList(response.data);
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
     const handleUpdateTitle = () => {
         axios
             .post('https://api.mever.me:8080/updateTitle', {
@@ -76,15 +76,15 @@ const ContolList = () => {
                 category,
             })
             .then((response) => {
-                console.log('업데이트 완료')
-                alert('업데이트 되었습니다.')
-                fetchData()
+                console.log('업데이트 완료');
+                alert('업데이트 되었습니다.');
+                fetchData();
             })
             .catch((error) => {
-                console.log('에러 발생:', error)
+                console.log('에러 발생:', error);
                 // 에러 처리에 대한 추가로 실행할 코드 작성
-            })
-    }
+            });
+    };
     const handleApplyButton = (title, subtitle) => {
         // return () => {
         //   setTimeout(() => {
@@ -92,27 +92,27 @@ const ContolList = () => {
         //     document.getElementById('subTitle').value = subtitle;
         //   }, 1);
         // };
-        setSelectedTitle({ title, subtitle })
-    }
+        setSelectedTitle({ title, subtitle });
+    };
     const hadleDeleteButton = (seq) => {
         axios
             .post('https://api.mever.me:8080/deleteTitle', {
                 seq,
             })
             .then((response) => {
-                alert('삭제가 되었습니다.')
-                fetchData()
+                alert('삭제가 되었습니다.');
+                fetchData();
             })
             .catch((error) => {
-                console.log('에러 발생:', error)
-            })
-    }
+                console.log('에러 발생:', error);
+            });
+    };
     useEffect(() => {
         if (selectedTitle) {
-            setMainTitle(selectedTitle.title)
-            setSubTitle(selectedTitle.subtitle)
+            setMainTitle(selectedTitle.title);
+            setSubTitle(selectedTitle.subtitle);
         }
-    }, [selectedTitle])
+    }, [selectedTitle]);
     return (
         <>
             {newJeans && (
@@ -226,7 +226,7 @@ const ContolList = () => {
                 </div>
             </Main>
         </>
-    )
-}
+    );
+};
 
-export default ContolList
+export default ContolList;

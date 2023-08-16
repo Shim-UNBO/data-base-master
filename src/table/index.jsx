@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import {
     Btn,
     BtnBox,
@@ -10,18 +10,18 @@ import {
     LoginBtn,
     LoginInput,
     Sidebar,
-} from './style'
-import PaymentList from '../components/PaymentList'
-import EmailList from '../components/EmailList'
-import SmsList from '../components/SmsList'
-import MemberList from '../components/MemberList '
-import ContolList from '../components/ControlList'
-import MainAnalytics from '../components/MainAnalytics'
-import Management from '../components/ManagementPage'
-import ReservationList from '../components/ReservationList'
-import MenuControl from '../components/MenuControl'
-import axios from 'axios'
-import { useCookies } from 'react-cookie'
+} from './style';
+import PaymentList from '../components/PaymentList';
+import EmailList from '../components/EmailList';
+import SmsList from '../components/SmsList';
+import MemberList from '../components/MemberList ';
+import ContolList from '../components/ControlList';
+import MainAnalytics from '../components/MainAnalytics';
+import Management from '../components/ManagementPage';
+import ReservationList from '../components/ReservationList';
+import MenuControl from '../components/MenuControl';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
 
 const PAGES = {
     MAIN: 'main',
@@ -35,22 +35,22 @@ const PAGES = {
     RESERVATION: 'reservation',
     SALES: 'sales',
     MENUCONTROL: 'menuControl',
-}
+};
 
 const TablePage = () => {
-    const [cookies, setCookie] = useCookies(['id'])
-    const [access, setAccess] = useState(false)
-    const [currentPage, setCurrentPage] = useState(PAGES.MAIN)
-    const [id, setId] = useState('')
-    const [password, setPassword] = useState('')
-    const [userInfo, setUserInfo] = useState(null)
-    const onId = (e) => setId(e.target.value)
-    const onPassword = (e) => setPassword(e.target.value)
+    const [cookies, setCookie] = useCookies(['id']);
+    const [access, setAccess] = useState(false);
+    const [currentPage, setCurrentPage] = useState(PAGES.MAIN);
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
+    const [userInfo, setUserInfo] = useState(null);
+    const onId = (e) => setId(e.target.value);
+    const onPassword = (e) => setPassword(e.target.value);
     const onKeyPress = (e) => {
         if (e.key === 'Enter') {
-            onSubmit()
+            onSubmit();
         }
-    }
+    };
     // SUBSCRIPTION BUTTON STATES :
 
     // SEARCH STATES:
@@ -67,37 +67,37 @@ const TablePage = () => {
                 password: password,
             })
             .then((response) => {
-                const data = response.data
+                const data = response.data;
                 // 회원 정보 확인 결과에 따라 로그인 처리
                 if (data.statusCodeValue !== 400) {
-                    localStorage.setItem('category', data.category)
-                    localStorage.setItem('name', data.name)
-                    localStorage.setItem('mainId', data.email)
+                    localStorage.setItem('category', data.category);
+                    localStorage.setItem('name', data.name);
+                    localStorage.setItem('mainId', data.email);
                     if (data.adminYn === 'Y' && data.name === 'master') {
-                        setCookie('id', 'true')
+                        setCookie('id', 'true');
                     } else {
-                        setCookie('id', 'false')
+                        setCookie('id', 'false');
                     }
-                    setUserInfo(data) // 사용자 정보 저장
-                    setAccess(true)
+                    setUserInfo(data); // 사용자 정보 저장
+                    setAccess(true);
                 } else {
-                    alert('아이디 또는 패스워드가 잘못되었습니다.')
+                    alert('아이디 또는 패스워드가 잘못되었습니다.');
                 }
             })
             .catch((error) => {
-                console.log(error)
+                console.log(error);
                 // 에러 처리에 대한 추가로 실행할 코드 작성
-            })
-    }
+            });
+    };
     const onSales = () => {
-        window.location.href = 'https://www.mever.me/sales/'
-    }
-    const onPageChange = (page) => setCurrentPage(page)
+        window.location.href = 'https://www.mever.me/sales/';
+    };
+    const onPageChange = (page) => setCurrentPage(page);
 
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
     const onOpen = () => {
-        setOpen(!open)
-    }
+        setOpen(!open);
+    };
 
     return (
         <Container>
@@ -120,7 +120,7 @@ const TablePage = () => {
                     <CloseWrap>
                         <Icon.Close
                             onClick={() => {
-                                setOpen(false)
+                                setOpen(false);
                             }}
                         />
                     </CloseWrap>
@@ -777,7 +777,7 @@ const TablePage = () => {
             {access && currentPage === PAGES.RESERVATION && <ReservationList />}
             {access && currentPage === PAGES.MENUCONTROL && <MenuControl />}
         </Container>
-    )
-}
+    );
+};
 
-export default TablePage
+export default TablePage;

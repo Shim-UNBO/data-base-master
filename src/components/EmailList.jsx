@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import {
     Main,
     Head,
@@ -8,18 +8,18 @@ import {
     BodyText,
     BodyWrap,
     Space,
-} from '../table/style'
+} from '../table/style';
 const EmailList = () => {
-    const [emailList, setEmailList] = useState([])
+    const [emailList, setEmailList] = useState([]);
 
     // EMAIL SENDING CONTENT DATA :
     useEffect(() => {
         axios
             .post('https://api.mever.me:8080/send/list?type=mail', {})
             .then((data) => {
-                setEmailList(data.data)
-            })
-    }, [])
+                setEmailList(data.data);
+            });
+    }, []);
     return (
         <>
             <Space></Space>
@@ -51,7 +51,7 @@ const EmailList = () => {
                 </BodyWrap>
             </Main>
         </>
-    )
-}
+    );
+};
 
-export default EmailList
+export default EmailList;

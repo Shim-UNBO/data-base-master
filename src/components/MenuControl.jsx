@@ -1,66 +1,66 @@
-import React, { useEffect, useState, useRef } from 'react'
-import './menuStyles.css'
-import axios from 'axios'
+import React, { useEffect, useState, useRef } from 'react';
+import './menuStyles.css';
+import axios from 'axios';
 
 const Management = () => {
-    const [menus, setMenu] = useState([])
-    const [selectedProduct, setSelectedProduct] = useState(null)
-    const [showPopup, setShowPopup] = useState(false)
-    const category = localStorage.getItem('category')
-    const [selectedMenu, setSelectedMenu] = useState(null)
+    const [menus, setMenu] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [showPopup, setShowPopup] = useState(false);
+    const category = localStorage.getItem('category');
+    const [selectedMenu, setSelectedMenu] = useState(null);
 
     useEffect(() => {
-        fetchItemList()
-    }, [])
+        fetchItemList();
+    }, []);
     const fetchItemList = () => {
         axios
             .post('https://api.mever.me:8080/menuList', {})
             .then((response) => {
-                console.log(response.data)
-                setMenu(response.data)
+                console.log(response.data);
+                setMenu(response.data);
             })
             .catch((error) => {
-                console.log(error)
-            })
-    }
+                console.log(error);
+            });
+    };
 
     const handleViewDetails = (seq) => {
         // 해당 메뉴의 상세 정보를 가져와서 selectedMenu에 저장
-        const selectedMenu = menus.find((menu) => menu.seq === seq)
-        setSelectedMenu(selectedMenu)
-        setShowPopup(true)
-    }
+        const selectedMenu = menus.find((menu) => menu.seq === seq);
+        setSelectedMenu(selectedMenu);
+        setShowPopup(true);
+    };
 
     const handleClosePopup = () => {
-        setShowPopup(false)
-    }
+        setShowPopup(false);
+    };
 
     const handleInputChange = (event) => {
-        const { name, value } = event.target
+        const { name, value } = event.target;
         setSelectedMenu({
             ...selectedMenu,
             [name]: value,
-        })
-    }
+        });
+    };
 
     const handleSaveChanges = (event) => {
-        const jsonData = JSON.stringify(selectedMenu)
-        console.log(jsonData)
+        const jsonData = JSON.stringify(selectedMenu);
+        console.log(jsonData);
         axios
             .post('https://api.mever.me:8080/updateMenu', jsonData, {
                 headers: { 'Content-Type': 'application/json' },
             })
             .then((response) => {
                 if (response.status === 200) {
-                    alert('수정이 완료되었습니다.')
+                    alert('수정이 완료되었습니다.');
                 } else {
-                    alert('수정에 실패했습니다.')
+                    alert('수정에 실패했습니다.');
                 }
             })
             .catch((error) => {
-                alert('에러 발생:', error)
-            })
-    }
+                alert('에러 발생:', error);
+            });
+    };
 
     //메뉴 추가하기
     const handleAddMenu = () => {
@@ -73,10 +73,10 @@ const Management = () => {
             introPhoto: '',
             ogTitle: '',
             ogDescription: '',
-        }
-        setSelectedMenu(newMenu)
-        setShowPopup(true)
-    }
+        };
+        setSelectedMenu(newMenu);
+        setShowPopup(true);
+    };
 
     return (
         <div>
@@ -220,7 +220,7 @@ const Management = () => {
                 )}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Management
+export default Management;

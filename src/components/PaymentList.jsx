@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import {
     Main,
     Head,
@@ -8,10 +8,10 @@ import {
     BodyText,
     BodyWrap,
     Space,
-} from '../table/style'
+} from '../table/style';
 const PaymentList = () => {
-    const [users, setUsers] = useState([])
-    const category = localStorage.getItem('category')
+    const [users, setUsers] = useState([]);
+    const category = localStorage.getItem('category');
 
     useEffect(() => {
         axios
@@ -20,9 +20,9 @@ const PaymentList = () => {
                 { category }
             )
             .then((data) => {
-                setUsers(data.data)
-            })
-    }, [])
+                setUsers(data.data);
+            });
+    }, []);
     return (
         <>
             <Space></Space>
@@ -63,7 +63,7 @@ const PaymentList = () => {
                 </BodyWrap>
             </Main>
         </>
-    )
-}
+    );
+};
 
-export default PaymentList
+export default PaymentList;

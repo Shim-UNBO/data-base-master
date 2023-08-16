@@ -1,6 +1,6 @@
-import styled from 'styled-components'
-import { ReactComponent as check } from '../../assets/icons/close-icon.svg'
-import { device } from '../../responsive'
+import styled from 'styled-components';
+import { ReactComponent as check } from '../../assets/icons/close-icon.svg';
+import { device } from '../../responsive';
 
 const Container = styled.div`
     position: fixed;
@@ -22,22 +22,22 @@ const Container = styled.div`
         padding: 10px 0;
         height: 600px;
     }
-`
+`;
 const Wrap = styled.div`
     display: flex;
     flex-direction: column;
     width: 85%;
     margin-top: 20px;
-`
+`;
 
-const Icon = styled.div``
+const Icon = styled.div``;
 Icon.Close = styled(check)`
     width: 30px;
     height: 30px;
     position: fixed;
     right: 1rem;
     cursor: pointer;
-`
+`;
 
 const Text = styled.p`
     font-size: 1rem;
@@ -45,7 +45,7 @@ const Text = styled.p`
     display: flex;
     font-weight: ${({ fontWeight }) => (fontWeight ? `${fontWeight}` : '600')};
     margin-bottom: 10px;
-`
+`;
 const Input = styled.input`
     width: 90%;
     height: 30px;
@@ -54,7 +54,7 @@ const Input = styled.input`
     padding: 0 15px;
     font-size: 1rem;
     border: none;
-`
+`;
 const TextArea = styled.textarea`
     width: 90%;
     height: 16em;
@@ -65,7 +65,7 @@ const TextArea = styled.textarea`
     padding: 10px 15px;
     font-size: 1rem;
     font-weight: 500;
-`
+`;
 const Btn = styled.div`
     width: 200px;
     height: 45px;
@@ -81,7 +81,7 @@ const Btn = styled.div`
     @media ${device.mobile} {
         margin-top: 10px;
     }
-`
+`;
 const Select = styled.select`
     height: 30px;
     width: 95%;
@@ -90,10 +90,10 @@ const Select = styled.select`
     border: none;
     cursor: pointer;
     outline: none;
-`
+`;
 const HeadWrap = styled.div`
     height: ${({ height }) => (height ? `${height}` : '53px')};
-`
+`;
 const Alert = styled.p`
     color: red;
     font-weight: 400;
@@ -102,7 +102,7 @@ const Alert = styled.p`
     text-align: center;
     font-size: 14px;
     margin-top: 3px;
-`
+`;
 
 export {
     Btn,
@@ -115,4 +115,4 @@ export {
     Input,
     Wrap,
     Select,
-}
+};

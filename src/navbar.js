@@ -1,5 +1,5 @@
-import TablePage from './table'
-export const navbar = [
+import TablePage from './table';
+export const publicRoutes = [
     {
         id: 1,
         element: <TablePage />,
@@ -8,4 +8,4 @@ export const navbar = [
         private: false,
         hidden: false,
     },
-]
+];

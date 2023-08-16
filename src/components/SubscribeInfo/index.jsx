@@ -1,14 +1,14 @@
-import React from 'react'
-import { BodyBox, Btn, Container, HeadingBox, Icon, Text, Wrap } from './style'
+import React from 'react';
+import { BodyBox, Btn, Container, HeadingBox, Icon, Text, Wrap } from './style';
 
 const SubscripPage = ({ setClose, uniqueData, setUserIndex }) => {
-    const user = uniqueData[0]
+    const user = uniqueData[0];
     const onClose = () => {
         // console.log('close');
-        setUserIndex('')
-        setClose(false)
-    }
-    const onConcel = () => {}
+        setUserIndex('');
+        setClose(false);
+    };
+    const onConcel = () => {};
     return (
         <Container>
             <Icon.Close onClick={onClose} />
@@ -37,7 +37,7 @@ const SubscripPage = ({ setClose, uniqueData, setUserIndex }) => {
 
             <Btn onChange={onConcel}>취소</Btn>
         </Container>
-    )
-}
+    );
+};
 
-export default SubscripPage
+export default SubscripPage;

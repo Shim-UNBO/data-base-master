@@ -1,7 +1,7 @@
-import styled from 'styled-components'
-import { device } from '../responsive'
-import { ReactComponent as close } from '../assets/icons/to-right.svg'
-import { ReactComponent as menu } from '../assets/icons/hamburger.svg'
+import styled from 'styled-components';
+import { device } from '../responsive';
+import { ReactComponent as close } from '../assets/icons/to-right.svg';
+import { ReactComponent as menu } from '../assets/icons/hamburger.svg';
 
 const Container = styled.div`
     display: flex;
@@ -13,7 +13,7 @@ const Container = styled.div`
         padding: 0 10px;
         height: 100vh;
     }
-`
+`;
 
 const Main = styled.div`
     max-width: 90vw;
@@ -29,7 +29,7 @@ const Main = styled.div`
         max-width: 98vw;
         position: relative;
     }
-`
+`;
 const Head = styled.div`
     display: flex;
     position: sticky;
@@ -47,7 +47,7 @@ const Head = styled.div`
         position: -ms-sticky;
         position: sticky;
     }
-`
+`;
 const HeadText = styled.p`
     font-size: 1.2rem;
     font-weight: 600;
@@ -57,7 +57,7 @@ const HeadText = styled.p`
         margin: 5px 0;
         font-size: 15px;
     }
-`
+`;
 
 const Body = styled.div`
     display: flex;
@@ -66,7 +66,7 @@ const Body = styled.div`
     @media ${device.laptop} {
         width: 1100px;
     }
-`
+`;
 const BodyText = styled.p`
     font-size: 1rem;
     flex: 1;
@@ -78,11 +78,11 @@ const BodyText = styled.p`
         margin: 5px 0;
         font-size: 14px;
     }
-`
+`;
 const BodyWrap = styled.div`
     display: flex;
     flex-direction: column-reverse;
-`
+`;
 
 const LoginBox = styled.div`
     position: fixed;
@@ -102,7 +102,7 @@ const LoginBox = styled.div`
         width: 320px;
         height: 270px;
     }
-`
+`;
 const LoginInput = styled.input`
     height: 40px;
     width: 260px;
@@ -111,7 +111,7 @@ const LoginInput = styled.input`
     outline: 0;
     padding: 0 20px;
     font-size: 1rem;
-`
+`;
 const LoginBtn = styled.div`
     height: 40px;
     width: 300px;
@@ -123,7 +123,7 @@ const LoginBtn = styled.div`
     font-weight: 600;
     background: #1cbcff;
     cursor: pointer;
-`
+`;
 const BtnBox = styled.div`
     display: flex;
     width: 90%;
@@ -133,7 +133,7 @@ const BtnBox = styled.div`
     @media ${device.mobile} {
         display: none;
     }
-`
+`;
 const Btn = styled.div`
     width: 150px;
     height: 40px;
@@ -154,7 +154,7 @@ const Btn = styled.div`
     @media ${device.mobile} {
         font-size: 1rem;
     }
-`
+`;
 
 const Sidebar = styled.div`
     position: fixed;
@@ -169,7 +169,7 @@ const Sidebar = styled.div`
     @media ${device.mobile} {
         display: block;
     }
-`
+`;
 const CloseWrap = styled.div`
     width: 35px;
     height: 88px;
@@ -178,12 +178,12 @@ const CloseWrap = styled.div`
     position: absolute;
     top: 50%;
     left: 0;
-`
-const Icon = styled.div``
+`;
+const Icon = styled.div``;
 
 Icon.Close = styled(close)`
     width: 30px;
-`
+`;
 Icon.Menu = styled(menu)`
     display: none;
     width: 40px;
@@ -194,7 +194,7 @@ Icon.Menu = styled(menu)`
     @media ${device.mobile} {
         display: block;
     }
-`
+`;
 const Space = styled.div`
     width: 100%;
     height: 40px;
@@ -203,7 +203,7 @@ const Space = styled.div`
     @media ${device.mobile} {
         display: block;
     }
-`
+`;
 
 export {
     Container,
@@ -222,4 +222,4 @@ export {
     CloseWrap,
     Icon,
     Space,
-}
+};

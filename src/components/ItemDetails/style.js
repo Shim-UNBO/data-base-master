@@ -1,5 +1,5 @@
-import styled from 'styled-components'
-import device from '../../responsive'
+import styled from 'styled-components';
+import device from '../../responsive';
 
 export const StyledPopupContainer = styled.div`
     top: 50%;
@@ -14,7 +14,7 @@ export const StyledPopupContainer = styled.div`
     justify-content: center;
     align-items: center;
     z-index: 1000;
-`
+`;
 
 export const StyledPopupContent = styled.div`
     background-color: white;
@@ -23,7 +23,7 @@ export const StyledPopupContent = styled.div`
     height: 100%;
     overflow: auto;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-`
+`;
 
 export const StyledCloseButton = styled.button`
     position: absolute;
@@ -38,11 +38,11 @@ export const StyledCloseButton = styled.button`
     &:hover {
         background-color: #999;
     }
-`
+`;
 
 export const Text = styled.div`
     margin: 10px 0;
-`
+`;
 
 export const TextArea = styled.textarea`
     width: 100%;
@@ -50,18 +50,18 @@ export const TextArea = styled.textarea`
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-`
+`;
 
 export const ThumbnailWrap = styled.div`
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-`
+`;
 
 export const ThumbnailImage = styled.img`
     max-width: 100px;
     height: auto;
-`
+`;
 export const Btn = styled.button`
     width: 200px;
     height: 45px;
@@ -73,4 +73,4 @@ export const Btn = styled.button`
     justify-content: center;
     align-items: center;
     cursor: pointer;
-`
+`;

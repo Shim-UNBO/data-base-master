@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react'
-import axios from 'axios'
+import React, { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
 import {
     Main,
     Head,
@@ -9,63 +9,63 @@ import {
     BodyWrap,
     Btn,
     LoginInput,
-} from '../table/style'
-import SubscripPage from './SubscribeInfo'
-import SendingPage from './SendingPage'
-import Modal from 'react-modal' // react-modal import
-import './modalStyles.css' // 추가한 CSS 파일을 불러옵니다.
-import * as XLSX from 'xlsx'
-import { useCookies } from 'react-cookie'
+} from '../table/style';
+import SubscripPage from './SubscribeInfo';
+import SendingPage from './SendingPage';
+import Modal from 'react-modal'; // react-modal import
+import './modalStyles.css'; // 추가한 CSS 파일을 불러옵니다.
+import * as XLSX from 'xlsx';
+import { useCookies } from 'react-cookie';
 
 const MemberList = () => {
-    const [memberList, setMemberList] = useState([])
-    const [selectUser, setSelectUser] = useState()
+    const [memberList, setMemberList] = useState([]);
+    const [selectUser, setSelectUser] = useState();
     // const [selectEmail, setSelectEmail] = useState()
-    const [uniquePage, setUniquePage] = useState(false)
-    const [inputEmail, setInputEmail] = useState('')
-    const [inputPhone, setInputPhone] = useState('')
-    const [checkedArr, setCheckedArr] = useState([])
-    const [sendingPage, setSendingPage] = useState(false)
+    const [uniquePage, setUniquePage] = useState(false);
+    const [inputEmail, setInputEmail] = useState('');
+    const [inputPhone, setInputPhone] = useState('');
+    const [checkedArr, setCheckedArr] = useState([]);
+    const [sendingPage, setSendingPage] = useState(false);
     // const [indexEmail, setIndexEmail] = useState()
-    const [checkedUsers, setCheckedUsers] = useState([])
-    const [uniqueData, setUniqueData] = useState([])
-    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [checkedUsers, setCheckedUsers] = useState([]);
+    const [uniqueData, setUniqueData] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalData, setModalData] = useState({
         userName: '',
         userPh: '',
         selectedCategory: '',
         inputDcrp: '',
-    })
-    const category = useRef(null)
-    const [searchKeyword, setSearchKeyword] = useState('')
-    const [selectedValue, setSelectedValue] = useState('')
-    const [cookies, setCookie, removeCookie] = useCookies(['id'])
-    const newJeans = cookies.id === 'true'
+    });
+    const category = useRef(null);
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const [selectedValue, setSelectedValue] = useState('');
+    const [cookies, setCookie, removeCookie] = useCookies(['id']);
+    const newJeans = cookies.id === 'true';
 
     const handleSelectChange = (event) => {
-        setSelectedValue(event.target.value) // 선택된 값 업데이트
-    }
+        setSelectedValue(event.target.value); // 선택된 값 업데이트
+    };
 
     //전체선택 기능
     const handleSelectAll = () => {
-        const allIndices = memberList.map((_, index) => index)
+        const allIndices = memberList.map((_, index) => index);
         allIndices.forEach((index) => {
-            const checkbox = document.querySelector(`.checkbox-${index}`)
-            checkbox.checked = !checkbox.checked // 선택 상태를 토글
-        })
-        setCheckedArr(allIndices)
-    }
+            const checkbox = document.querySelector(`.checkbox-${index}`);
+            checkbox.checked = !checkbox.checked; // 선택 상태를 토글
+        });
+        setCheckedArr(allIndices);
+    };
     //카테고리 변경 시 전체 체크 해제 후 데이터 가져오기
     const handleButtonClick = () => {
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]')
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach((checkbox) => {
-            checkbox.checked = false
-        })
+            checkbox.checked = false;
+        });
         if (selectedValue) {
-            category.current = selectedValue
-            fetchData(selectedValue) // 선택된 값으로 데이터를 가져오는 함수 호출
+            category.current = selectedValue;
+            fetchData(selectedValue); // 선택된 값으로 데이터를 가져오는 함수 호출
         }
-    }
+    };
     const fetchData = (selectedCategory) => {
         axios
             .post('https://api.mever.me:8080/member/list', null, {
@@ -76,16 +76,16 @@ const MemberList = () => {
             .then((response) => {
                 setMemberList(
                     response.data.filter((member) => member.adminYn !== 'Y')
-                )
+                );
             })
             .catch((error) => {
-                console.error('Error fetching data:', error)
-            })
-    }
+                console.error('Error fetching data:', error);
+            });
+    };
     // 셀렉트 박스의 선택된 분류 값을 저장할 상태
     // MEMBER DATA :
     useEffect(() => {
-        category.current = localStorage.getItem('category')
+        category.current = localStorage.getItem('category');
         axios
             .post('https://api.mever.me:8080/member/list', null, {
                 params: {
@@ -96,20 +96,20 @@ const MemberList = () => {
             .then((response) => {
                 setMemberList(
                     response.data.filter((member) => member.adminYn !== 'Y')
-                )
+                );
             })
             .catch((error) => {
-                console.error('Error fetching data:', error)
-            })
-    }, [])
+                console.error('Error fetching data:', error);
+            });
+    }, []);
 
     // SUBSCRIBTION BUTTON FUNCTION :
     const onSubscribe = (index) => {
-        setUniquePage(true)
-        setSelectUser(index)
-        setInputEmail(memberList[index]?.email)
-        setInputPhone(memberList[index]?.phone)
-    }
+        setUniquePage(true);
+        setSelectUser(index);
+        setInputEmail(memberList[index]?.email);
+        setInputPhone(memberList[index]?.phone);
+    };
     // SEND EMAIL BTN FUNCTION:
     // const onSendEmail = (index) => {
     //   setSelectEmail(index)
@@ -135,31 +135,31 @@ const MemberList = () => {
     const onCheck = (index) => {
         setCheckedArr((prevArr) => {
             if (!prevArr.includes(index)) {
-                return [...prevArr, index]
+                return [...prevArr, index];
             } else {
-                return prevArr.filter((item) => item !== index)
+                return prevArr.filter((item) => item !== index);
             }
-        })
-    }
+        });
+    };
     // console.log(checkedUsers);
 
     const onSendList = () => {
         if (checkedArr.length > 0) {
-            setCheckedUsers(checkedArr)
-            setSendingPage(true)
+            setCheckedUsers(checkedArr);
+            setSendingPage(true);
         } else {
-            alert('먼저 사용자를 선택하세요!')
+            alert('먼저 사용자를 선택하세요!');
         }
-    }
+    };
     // 전화걸기 함수
     const callPhoneNumber = (phone) => {
         // 전화를 걸기 위한 로직을 구현합니다.
         // 예를 들어, window.open() 메서드를 사용하여 전화를 걸 수 있습니다.
-        window.location.href = `tel:${phone}`
-    }
+        window.location.href = `tel:${phone}`;
+    };
     const updateMember = (index, category, dcrp) => {
-        const user = memberList[index]
-        const mainId = localStorage.getItem('mainId')
+        const user = memberList[index];
+        const mainId = localStorage.getItem('mainId');
 
         return new Promise((resolve, reject) => {
             if (user.manager === mainId || user.manager === null) {
@@ -174,46 +174,46 @@ const MemberList = () => {
                     })
                     .then((response) => {
                         // 성공적으로 서버에 저장한 경우
-                        console.log('서버 응답 데이터:', response.data)
-                        resolve() // Promise를 resolve하여 성공했음을 알립니다.
+                        console.log('서버 응답 데이터:', response.data);
+                        resolve(); // Promise를 resolve하여 성공했음을 알립니다.
                     })
                     .catch((error) => {
                         // 데이터 전송 실패시 에러 처리를 해줄 수 있습니다.
-                        console.error('데이터 전송 실패:', error)
-                        reject(error) // Promise를 reject하여 실패했음을 알립니다.
-                    })
+                        console.error('데이터 전송 실패:', error);
+                        reject(error); // Promise를 reject하여 실패했음을 알립니다.
+                    });
             } else {
-                alert('권한이 없습니다.')
-                reject('권한이 없습니다.') // Promise를 reject하여 실패했음을 알립니다.
+                alert('권한이 없습니다.');
+                reject('권한이 없습니다.'); // Promise를 reject하여 실패했음을 알립니다.
             }
-        })
-    }
+        });
+    };
     // 모달 창 열기
     const openModal = (index) => {
-        const user = memberList[index]
+        const user = memberList[index];
         setModalData({
             name: user.name,
             phone: user.phone,
             selectedCategory: user.progress || '', // 초기 select 박스 값 설정
             inputDcrp: user.dcrp || '', // 초기 textarea 값 설정
-        })
-        setIsModalOpen(true)
-        setSelectUser(index) // 선택된 사용자 인덱스 설정
-    }
+        });
+        setIsModalOpen(true);
+        setSelectUser(index); // 선택된 사용자 인덱스 설정
+    };
     // select 박스와 textarea 변경을 처리하는 함수
     const handleChange = (e) => {
-        const { name, value } = e.target
-        setModalData((prevData) => ({ ...prevData, [name]: value }))
-    }
+        const { name, value } = e.target;
+        setModalData((prevData) => ({ ...prevData, [name]: value }));
+    };
     const saveChanges = () => {
         if (selectUser !== null) {
-            const { name, phone, selectedCategory, inputDcrp } = modalData
-            const updatedDcrp = inputDcrp + '\r\n' + getCurrentDateTimeString()
+            const { name, phone, selectedCategory, inputDcrp } = modalData;
+            const updatedDcrp = inputDcrp + '\r\n' + getCurrentDateTimeString();
 
-            updateMember(selectUser, selectedCategory, updatedDcrp)
+            updateMember(selectUser, selectedCategory, updatedDcrp);
 
             // 모달 창 닫기
-            setIsModalOpen(false)
+            setIsModalOpen(false);
 
             // 데이터 업데이트
             setMemberList((prevList) =>
@@ -227,28 +227,28 @@ const MemberList = () => {
                           }
                         : item
                 )
-            )
+            );
         }
-    }
+    };
     // 모달 창 닫기
     const closeModal = () => {
-        setIsModalOpen(false)
-    }
+        setIsModalOpen(false);
+    };
     const getCurrentDateTimeString = () => {
-        const now = new Date()
-        const year = now.getFullYear()
-        const month = String(now.getMonth() + 1).padStart(2, '0')
-        const day = String(now.getDate()).padStart(2, '0')
-        const hours = String(now.getHours()).padStart(2, '0')
-        const minutes = String(now.getMinutes()).padStart(2, '0')
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
 
-        return `${year}-${month}-${day} ${hours}:${minutes}`
-    }
+        return `${year}-${month}-${day} ${hours}:${minutes}`;
+    };
 
     const downloadExcel = () => {
         const sortedMemberList = [...memberList].sort(
             (a, b) => new Date(b.regdate) - new Date(a.regdate)
-        )
+        );
 
         // 테이블의 데이터 가져오기
         const data = sortedMemberList.map((list) => ({
@@ -259,32 +259,32 @@ const MemberList = () => {
             진행: list.progress,
             내용: list.dcrp,
             담당자: list.manager,
-        }))
+        }));
 
         // 워크북 생성
-        const workbook = XLSX.utils.book_new()
+        const workbook = XLSX.utils.book_new();
 
         // 워크시트 생성
-        const worksheet = XLSX.utils.json_to_sheet(data)
+        const worksheet = XLSX.utils.json_to_sheet(data);
 
         // 워크북에 워크시트 추가
-        XLSX.utils.book_append_sheet(workbook, worksheet, '테이블 데이터')
+        XLSX.utils.book_append_sheet(workbook, worksheet, '테이블 데이터');
 
         // 엑셀 파일로 저장
-        XLSX.writeFile(workbook, 'member.xlsx')
-    }
+        XLSX.writeFile(workbook, 'member.xlsx');
+    };
     // 검색어 입력 시 실행되는 이벤트 핸들러
     const handleSearch = (e) => {
-        const { value } = e.target
-        setSearchKeyword(value)
-    }
+        const { value } = e.target;
+        setSearchKeyword(value);
+    };
 
     // 회원 목록을 검색어에 따라 필터링하는 함수
     const filterMembers = (members) => {
         if (!searchKeyword) {
-            return members
+            return members;
         }
-        const keyword = searchKeyword.toLowerCase()
+        const keyword = searchKeyword.toLowerCase();
         return members.filter(
             (member) =>
                 member.name?.toLowerCase().includes(keyword) ||
@@ -301,8 +301,8 @@ const MemberList = () => {
                 false ||
                 member.regdate?.toLowerCase().includes(keyword) ||
                 false
-        )
-    }
+        );
+    };
     return (
         <>
             {newJeans && (
@@ -417,7 +417,7 @@ const MemberList = () => {
                                             }}
                                             type="checkbox"
                                             onChange={() => {
-                                                onCheck(index)
+                                                onCheck(index);
                                             }}
                                         />
                                     </BodyText>
@@ -459,7 +459,7 @@ const MemberList = () => {
                                         </Btn>
                                     </BodyText>
                                 </Body>
-                            )
+                            );
                         } else {
                             return (
                                 <Body
@@ -484,7 +484,7 @@ const MemberList = () => {
                                             }}
                                             type="checkbox"
                                             onChange={() => {
-                                                onCheck(index)
+                                                onCheck(index);
                                             }}
                                         />
                                     </BodyText>
@@ -518,14 +518,14 @@ const MemberList = () => {
                                                       }
                                             }
                                             onClick={() => {
-                                                onSubscribe(index)
+                                                onSubscribe(index);
                                             }}
                                         >
                                             구독 정보
                                         </Btn>
                                     </BodyText>
                                 </Body>
-                            )
+                            );
                         }
                     })}
                 </BodyWrap>
@@ -609,7 +609,7 @@ const MemberList = () => {
                 />
             )}
         </>
-    )
-}
+    );
+};
 
-export default MemberList
+export default MemberList;

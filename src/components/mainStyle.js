@@ -1,5 +1,5 @@
-import styled from 'styled-components'
-import { Bar, Doughnut } from 'react-chartjs-2'
+import styled from 'styled-components';
+import { Bar, Doughnut } from 'react-chartjs-2';
 
 export const CloseButton = styled.button`
     padding: 0;
@@ -16,7 +16,7 @@ export const CloseButton = styled.button`
     span {
         display: none;
     }
-`
+`;
 export const ChartContainer = styled.div`
     border: 1px solid black;
     border-radius: 10px;
@@ -24,13 +24,13 @@ export const ChartContainer = styled.div`
     justify-content: center;
     align-items: center;
     margin: 20px;
-`
+`;
 
 export const DoughnutChart = styled(Doughnut)`
     border: 1px solid black;
     border-radius: 10px;
     font-weight: bold;
-`
+`;
 
 export const Main = styled.div`
     max-width: 70vw;
@@ -39,7 +39,7 @@ export const Main = styled.div`
     overflow-y: scroll;
     border: 1px solid coral;
     border-radius: 10px;
-`
+`;
 
 export const Head = styled.div`
     position: sticky;
@@ -47,14 +47,14 @@ export const Head = styled.div`
     width: 100%;
     justify-content: space-around;
     background-color: coral;
-`
+`;
 
 export const HeadText = styled.p`
     font-size: 1.2rem;
     font-weight: 600;
     flex: 1;
     text-align: center;
-`
+`;
 
 export const Body = styled.div`
     display: flex;
@@ -64,7 +64,7 @@ export const Body = styled.div`
     &:hover {
         background: rgba(0, 0, 0, 0.1);
     }
-`
+`;
 
 export const BodyText = styled.p`
     font-size: 1.4rem;
@@ -72,12 +72,12 @@ export const BodyText = styled.p`
     text-align: center;
     display: flex;
     justify-content: center;
-`
+`;
 
 export const BodyWrap = styled.div`
     display: flex;
     flex-direction: column-reverse;
-`
+`;
 
 export const Btn = styled.div`
     width: 150px;
@@ -93,10 +93,10 @@ export const Btn = styled.div`
     background: #1cbcff;
     color: #fff;
     cursor: pointer;
-`
+`;
 export const InputContainer = styled.div`
     margin-bottom: 10px;
-`
+`;
 
 export const Input = styled.input`
     padding: 10px;
@@ -104,7 +104,7 @@ export const Input = styled.input`
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
-`
+`;
 export const CalendarContainer = styled.div`
     width: 80%;
     /* 모바일 스타일 */
@@ -118,7 +118,7 @@ export const CalendarContainer = styled.div`
             height: 300%;
         }
     }
-`
+`;
 
 export const Popup = styled.div`
     background-color: #fffd;
@@ -151,13 +151,13 @@ export const Popup = styled.div`
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         z-index: 999;
     }
-`
+`;
 
 export const ButtonContainer = styled.div`
     display: flex;
     justify-content: center;
     margin-top: 20px;
-`
+`;
 
 export const Button = styled.button`
     background-color: #0e3b68;
@@ -168,7 +168,7 @@ export const Button = styled.button`
     margin: 0 10px;
     cursor: pointer;
     font-weight: bold;
-`
+`;
 
 export const Overlay = styled.div`
     background-color: rgba(0, 0, 0, 0.6);
@@ -178,22 +178,22 @@ export const Overlay = styled.div`
     width: 100%;
     height: 100%;
     z-index: 998;
-`
+`;
 export const eventContainer = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-}
+};
 
 export const eventTitle = {
     marginTop: '5px',
     fontWeight: 'bold',
-}
+};
 
 export const eventTime = {
     fontWeight: 'normal',
     textAlign: 'left',
-}
+};
 
 export const eventStatus = {
     marginTop: '5px',
@@ -201,19 +201,19 @@ export const eventStatus = {
     borderRadius: '5px',
     color: '#fff',
     fontWeight: 'bold',
-}
+};
 
 export const eventStatusPending = {
     ...eventStatus,
     backgroundColor: 'green',
-}
+};
 
 export const eventStatusApproved = {
     ...eventStatus,
     backgroundColor: 'blue',
-}
+};
 
 export const eventStatusReject = {
     ...eventStatus,
     backgroundColor: 'red',
-}
+};

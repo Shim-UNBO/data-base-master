@@ -1,48 +1,48 @@
-import React, { useState, useEffect } from 'react'
-import * as Styled from './style' // 스타일을 불러오는 부분
-import axios from 'axios'
-import { useHistory } from 'react-router-dom'
-import { AiOutlineClose } from 'react-icons/ai'
+import React, { useState, useEffect } from 'react';
+import * as Styled from './style'; // 스타일을 불러오는 부분
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+import { AiOutlineClose } from 'react-icons/ai';
 
 const ItemDetails = ({ itemDetails, handleClosePopup, handleRefresh }) => {
-    const [thumbnailUrls, setThumbnailUrls] = useState([])
-    const [contents, setContents] = useState(itemDetails.contents || '')
-    const [itemTitle, setItemTitle] = useState(itemDetails.itemTitle || '')
-    const [orderName, setOrderName] = useState(itemDetails.orderName || '')
-    const [photoUrl, setPhotoUrl] = useState(itemDetails.photoUrl || '')
-    const [videoUrl, setVideoUrl] = useState(itemDetails.videoUrl || '')
-    const [price, setPrice] = useState(itemDetails.price || '')
-    const [orderId, setOrderId] = useState(itemDetails.orderId || '')
-    const [readOnly, setReadOnly] = useState(true)
-    const [isEditing, setIsEditing] = useState(false)
+    const [thumbnailUrls, setThumbnailUrls] = useState([]);
+    const [contents, setContents] = useState(itemDetails.contents || '');
+    const [itemTitle, setItemTitle] = useState(itemDetails.itemTitle || '');
+    const [orderName, setOrderName] = useState(itemDetails.orderName || '');
+    const [photoUrl, setPhotoUrl] = useState(itemDetails.photoUrl || '');
+    const [videoUrl, setVideoUrl] = useState(itemDetails.videoUrl || '');
+    const [price, setPrice] = useState(itemDetails.price || '');
+    const [orderId, setOrderId] = useState(itemDetails.orderId || '');
+    const [readOnly, setReadOnly] = useState(true);
+    const [isEditing, setIsEditing] = useState(false);
 
     const updateThumbnailUrls = () => {
-        clearThumbnailUrls()
-        const urls = []
-        const { videoUrl } = itemDetails || {}
+        clearThumbnailUrls();
+        const urls = [];
+        const { videoUrl } = itemDetails || {};
         if (videoUrl && videoUrl !== '') {
-            let replaceUrl = videoUrl
-            replaceUrl = replaceUrl.replace('https://youtu.be/', '')
+            let replaceUrl = videoUrl;
+            replaceUrl = replaceUrl.replace('https://youtu.be/', '');
             replaceUrl = replaceUrl.replace(
                 'https://www.youtube.com/embed/',
                 ''
-            )
+            );
             replaceUrl = replaceUrl.replace(
                 'https://www.youtube.com/watch?v=',
                 ''
-            )
-            const finUrl = replaceUrl.split('&')[0]
-            urls.push(`https://img.youtube.com/vi/${finUrl}/mqdefault.jpg`)
+            );
+            const finUrl = replaceUrl.split('&')[0];
+            urls.push(`https://img.youtube.com/vi/${finUrl}/mqdefault.jpg`);
         }
-        setThumbnailUrls(urls)
-    }
+        setThumbnailUrls(urls);
+    };
 
     const clearThumbnailUrls = () => {
-        setThumbnailUrls([])
-    }
+        setThumbnailUrls([]);
+    };
 
     const handleUpdateContents = () => {
-        const category = localStorage.getItem('category')
+        const category = localStorage.getItem('category');
         if (isEditing) {
             axios
                 .post('https://api.mever.me:8080/updateContents', {
@@ -56,23 +56,23 @@ const ItemDetails = ({ itemDetails, handleClosePopup, handleRefresh }) => {
                     category,
                 })
                 .then((response) => {
-                    console.log('업데이트 완료')
-                    alert('업데이트 되었습니다.')
-                    handleClosePopup()
-                    handleRefresh()
+                    console.log('업데이트 완료');
+                    alert('업데이트 되었습니다.');
+                    handleClosePopup();
+                    handleRefresh();
                 })
                 .catch((error) => {
-                    console.log(error)
-                })
+                    console.log(error);
+                });
         } else {
-            setIsEditing(true)
-            setReadOnly(false)
+            setIsEditing(true);
+            setReadOnly(false);
         }
-    }
+    };
 
     useEffect(() => {
-        updateThumbnailUrls()
-    }, [itemDetails])
+        updateThumbnailUrls();
+    }, [itemDetails]);
 
     return (
         <Styled.StyledPopupContainer>
@@ -154,7 +154,7 @@ const ItemDetails = ({ itemDetails, handleClosePopup, handleRefresh }) => {
                 </Styled.Btn>
             </Styled.StyledPopupContent>
         </Styled.StyledPopupContainer>
-    )
-}
+    );
+};
 
-export default ItemDetails
+export default ItemDetails;

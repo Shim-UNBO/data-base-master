@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import {
     Main,
     Head,
@@ -8,18 +8,18 @@ import {
     BodyText,
     BodyWrap,
     Space,
-} from '../table/style'
+} from '../table/style';
 const SmsList = () => {
-    const [smsList, setSmsList] = useState([])
+    const [smsList, setSmsList] = useState([]);
 
     // SMS SENDING CONTENT DATA :
     useEffect(() => {
         axios
             .post('https://api.mever.me:8080/send/list?type=sms', {})
             .then((data) => {
-                setSmsList(data.data)
-            })
-    }, [])
+                setSmsList(data.data);
+            });
+    }, []);
     return (
         <>
             <Space></Space>
@@ -49,7 +49,7 @@ const SmsList = () => {
                 </BodyWrap>
             </Main>
         </>
-    )
-}
+    );
+};
 
-export default SmsList
+export default SmsList;

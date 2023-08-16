@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react';
 import {
     Main,
     Head,
@@ -7,64 +7,64 @@ import {
     InputContainer,
     Input,
     Btn,
-} from '../../table/style'
-import axios from 'axios'
-import './itemList.css'
-import ItemDetails from '../ItemDetails'
-import { useCookies } from 'react-cookie'
+} from '../../table/style';
+import axios from 'axios';
+import './itemList.css';
+import ItemDetails from '../ItemDetails';
+import { useCookies } from 'react-cookie';
 
 const Management = () => {
-    const [products, setProducts] = useState([])
-    const [selectedProduct, setSelectedProduct] = useState(null)
-    const [thumbnailUrls, setThumbnailUrls] = useState([])
-    const videoUrlRef = useRef(null)
-    const [showPopup, setShowPopup] = useState(false)
-    const [itemDetails, setItemDetails] = useState(false)
+    const [products, setProducts] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [thumbnailUrls, setThumbnailUrls] = useState([]);
+    const videoUrlRef = useRef(null);
+    const [showPopup, setShowPopup] = useState(false);
+    const [itemDetails, setItemDetails] = useState(false);
     // const category = localStorage.getItem('category');
-    const category = useRef(null)
-    const [selectedValue, setSelectedValue] = useState('')
-    const [cookies, setCookie, removeCookie] = useCookies(['id'])
-    const newJeans = cookies.id === 'true'
+    const category = useRef(null);
+    const [selectedValue, setSelectedValue] = useState('');
+    const [cookies, setCookie, removeCookie] = useCookies(['id']);
+    const newJeans = cookies.id === 'true';
     const handleSelectChange = (event) => {
-        setSelectedValue(event.target.value) // 선택된 값 업데이트
-    }
+        setSelectedValue(event.target.value); // 선택된 값 업데이트
+    };
     const handleButtonClick = () => {
         if (selectedValue) {
-            fetchData(selectedValue) // 선택된 값으로 데이터를 가져오는 함수 호출
-            category.current = selectedValue
+            fetchData(selectedValue); // 선택된 값으로 데이터를 가져오는 함수 호출
+            category.current = selectedValue;
         }
-    }
+    };
     const fetchData = async (selectedValue) => {
         axios
             .post('https://api.mever.me:8080/itemList', {
                 category: selectedValue,
             })
             .then((response) => {
-                console.log(response.data)
-                setProducts(response.data)
+                console.log(response.data);
+                setProducts(response.data);
             })
             .catch((error) => {
-                console.log(error)
-            })
-    }
+                console.log(error);
+            });
+    };
 
     useEffect(() => {
-        fetchItemList()
-    }, [])
+        fetchItemList();
+    }, []);
     const fetchItemList = () => {
-        category.current = localStorage.getItem('category')
+        category.current = localStorage.getItem('category');
         axios
             .post('https://api.mever.me:8080/itemList', {
                 category: category.current,
             })
             .then((response) => {
-                console.log(response.data)
-                setProducts(response.data)
+                console.log(response.data);
+                setProducts(response.data);
             })
             .catch((error) => {
-                console.log(error)
-            })
-    }
+                console.log(error);
+            });
+    };
 
     const handleViewDetails = (orderId) => {
         axios
@@ -75,21 +75,21 @@ const Management = () => {
                 photoUrl: '',
             })
             .then((response) => {
-                console.log(response.data)
-                setSelectedProduct(response.data)
-                setShowPopup(true)
+                console.log(response.data);
+                setSelectedProduct(response.data);
+                setShowPopup(true);
             })
             .catch((error) => {
-                console.log(error)
-            })
-    }
+                console.log(error);
+            });
+    };
 
     const handleClosePopup = () => {
-        setShowPopup(false)
-    }
+        setShowPopup(false);
+    };
     const handleRefresh = () => {
-        fetchItemList()
-    }
+        fetchItemList();
+    };
     return (
         <>
             {newJeans && (
@@ -171,7 +171,7 @@ const Management = () => {
                 )}
             </div>
         </>
-    )
-}
+    );
+};
 
-export default Management
+export default Management;

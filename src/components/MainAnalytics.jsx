@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react'
-import axios from 'axios'
+import React, { useEffect, useState, useCallback } from 'react';
+import axios from 'axios';
 import {
     Main,
     Head,
@@ -9,35 +9,35 @@ import {
     BodyWrap,
     Btn,
     Space,
-} from '../table/style'
-import { Chart, registerables } from 'chart.js'
-import { Bar, Pie, Doughnut } from 'react-chartjs-2'
-import Spinner from './Spinner'
-import { useCookies } from 'react-cookie'
+} from '../table/style';
+import { Chart, registerables } from 'chart.js';
+import { Bar, Pie, Doughnut } from 'react-chartjs-2';
+import Spinner from './Spinner';
+import { useCookies } from 'react-cookie';
 
-Chart.register(...registerables)
+Chart.register(...registerables);
 
 const MainAnalytics = () => {
-    const [chartData, setChartData] = useState(null)
-    const [analyticsList, setAnalyticsList] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [chartKey, setChartKey] = useState(Date.now()) // key attribute added
-    const [title, setTitle] = useState('')
-    const category = localStorage.getItem('category')
-    const [mainTitle, setMainTitle] = useState('')
-    const [subTitle, setSubTitle] = useState('')
-    const [selectedValue, setSelectedValue] = useState('')
-    const [cookies, setCookie, removeCookie] = useCookies(['id'])
-    const newJeans = cookies.id === 'true'
+    const [chartData, setChartData] = useState(null);
+    const [analyticsList, setAnalyticsList] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [chartKey, setChartKey] = useState(Date.now()); // key attribute added
+    const [title, setTitle] = useState('');
+    const category = localStorage.getItem('category');
+    const [mainTitle, setMainTitle] = useState('');
+    const [subTitle, setSubTitle] = useState('');
+    const [selectedValue, setSelectedValue] = useState('');
+    const [cookies, setCookie, removeCookie] = useCookies(['id']);
+    const newJeans = cookies.id === 'true';
     const handleSelectChange = (event) => {
-        setSelectedValue(event.target.value) // 선택된 값 업데이트
-    }
+        setSelectedValue(event.target.value); // 선택된 값 업데이트
+    };
 
     const handleButtonClick = () => {
         if (selectedValue) {
-            fetchData(selectedValue) // 선택된 값으로 데이터를 가져오는 함수 호출
+            fetchData(selectedValue); // 선택된 값으로 데이터를 가져오는 함수 호출
         }
-    }
+    };
     const fetchData = (selectedCategory) => {
         axios
             .post('https://api.mever.me:8080/analyticsList', null, {
@@ -46,15 +46,15 @@ const MainAnalytics = () => {
                 },
             })
             .then((response) => {
-                let filteredList = response.data
-                setAnalyticsList(filteredList)
-                const users = filteredList.map((item) => item.users)
-                const newUsers = filteredList.map((item) => item.newUsers)
-                const pageTitle = filteredList.map((item) => item.page_title)
+                let filteredList = response.data;
+                setAnalyticsList(filteredList);
+                const users = filteredList.map((item) => item.users);
+                const newUsers = filteredList.map((item) => item.newUsers);
+                const pageTitle = filteredList.map((item) => item.page_title);
                 const newSession = filteredList.map(
                     (item) => item.percentNewSessions
-                )
-                const totalSession = 100 - newSession
+                );
+                const totalSession = 100 - newSession;
 
                 if (filteredList.length > 0) {
                     const barChartData = {
@@ -73,7 +73,7 @@ const MainAnalytics = () => {
                                 borderWidth: 1,
                             },
                         ],
-                    }
+                    };
 
                     const doughnutChartData = {
                         labels: ['신규 방문자', '기존 방문자'],
@@ -89,15 +89,15 @@ const MainAnalytics = () => {
                                 borderWidth: 0,
                             },
                         ],
-                    }
-                    setChartData({ barChartData, doughnutChartData })
-                    setupTitle(selectedCategory)
+                    };
+                    setChartData({ barChartData, doughnutChartData });
+                    setupTitle(selectedCategory);
                 }
-                setLoading(false)
+                setLoading(false);
             })
             .catch((error) => {
-                console.error('Error fetching data:', error)
-            })
+                console.error('Error fetching data:', error);
+            });
         const setupTitle = async (selectedCategory) => {
             try {
                 const response = await axios.post(
@@ -105,16 +105,16 @@ const MainAnalytics = () => {
                     {
                         category: selectedCategory,
                     }
-                )
-                const { title, subTitle } = response.data
-                console.log(response.data)
-                setMainTitle(title)
-                setSubTitle(subTitle)
+                );
+                const { title, subTitle } = response.data;
+                console.log(response.data);
+                setMainTitle(title);
+                setSubTitle(subTitle);
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
-        }
-    }
+        };
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -124,19 +124,19 @@ const MainAnalytics = () => {
                     {
                         category: category,
                     }
-                )
-                const { title, subTitle } = response.data
-                setMainTitle(title)
-                setSubTitle(subTitle)
+                );
+                const { title, subTitle } = response.data;
+                setMainTitle(title);
+                setSubTitle(subTitle);
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
-        }
-        fetchData()
-    }, [])
+        };
+        fetchData();
+    }, []);
 
     useEffect(() => {
-        setLoading(true)
+        setLoading(true);
         axios
             .post('https://api.mever.me:8080/analyticsList', null, {
                 params: {
@@ -144,15 +144,15 @@ const MainAnalytics = () => {
                 },
             })
             .then((response) => {
-                let filteredList = response.data
-                setAnalyticsList(filteredList)
-                const users = filteredList.map((item) => item.users)
-                const newUsers = filteredList.map((item) => item.newUsers)
-                const pageTitle = filteredList.map((item) => item.page_title)
+                let filteredList = response.data;
+                setAnalyticsList(filteredList);
+                const users = filteredList.map((item) => item.users);
+                const newUsers = filteredList.map((item) => item.newUsers);
+                const pageTitle = filteredList.map((item) => item.page_title);
                 const newSession = filteredList.map(
                     (item) => item.percentNewSessions
-                )
-                const totalSession = 100 - newSession
+                );
+                const totalSession = 100 - newSession;
 
                 if (filteredList.length > 0) {
                     const barChartData = {
@@ -171,7 +171,7 @@ const MainAnalytics = () => {
                                 borderWidth: 1,
                             },
                         ],
-                    }
+                    };
 
                     const doughnutChartData = {
                         labels: ['신규 방문자', '기존 방문자'],
@@ -187,17 +187,17 @@ const MainAnalytics = () => {
                                 borderWidth: 0,
                             },
                         ],
-                    }
-                    setChartData({ barChartData, doughnutChartData })
+                    };
+                    setChartData({ barChartData, doughnutChartData });
                 }
-                setLoading(false)
+                setLoading(false);
                 // console.log(filteredList);
             })
             .catch((error) => {
-                console.log(error)
-                setLoading(false)
-            })
-    }, [category])
+                console.log(error);
+                setLoading(false);
+            });
+    }, [category]);
 
     const doughnutOptions = {
         responsive: true,
@@ -218,15 +218,15 @@ const MainAnalytics = () => {
             //   },
             // },
         },
-    }
+    };
 
     const renderChart = () => {
         if (chartData) {
-            return <Bar data={chartData.barChartData} key={chartKey} />
+            return <Bar data={chartData.barChartData} key={chartKey} />;
         } else {
-            return null
+            return null;
         }
-    }
+    };
     const renderDoughnutChart = () => {
         if (chartData && chartData.doughnutChartData) {
             return (
@@ -234,21 +234,21 @@ const MainAnalytics = () => {
                     data={chartData.doughnutChartData}
                     options={doughnutOptions}
                 />
-            )
+            );
         } else {
-            return null
+            return null;
         }
-    }
+    };
 
     const resetChart = () => {
         // setChartData(null);
-        setChartKey(Date.now())
-        renderChart()
-        renderDoughnutChart()
-    }
+        setChartKey(Date.now());
+        renderChart();
+        renderDoughnutChart();
+    };
 
-    localStorage.setItem('mainTitle', mainTitle)
-    localStorage.setItem('subTitle', subTitle)
+    localStorage.setItem('mainTitle', mainTitle);
+    localStorage.setItem('subTitle', subTitle);
     return (
         <>
             {newJeans && (
@@ -349,7 +349,7 @@ const MainAnalytics = () => {
                 </Body>
             </Main>
         </>
-    )
-}
+    );
+};
 
-export default MainAnalytics
+export default MainAnalytics;
