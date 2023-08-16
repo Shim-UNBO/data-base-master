@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { publicRoutes } from './navbar';
+import { publicRoutes } from './routes';
 export const Root = () => {
     return (
         <BrowserRouter>
