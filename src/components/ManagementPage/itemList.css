@@ -1,40 +1,40 @@
 .itemList {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
 }
 
 /* 각 상품 컨테이너 */
 .product {
-  border: 1px solid #ccc;
-  padding: 10px;
-  background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
 }
 
 .product img {
-  max-width: 100%;
-  height: auto;
+    max-width: 100%;
+    height: auto;
 }
 
 .itemTitle {
-  font-size: 1.2rem;
-  margin: 10px 0;
+    font-size: 1.2rem;
+    margin: 10px 0;
 }
 
 .product div {
-  font-size: 1rem;
-  color: #333;
-  margin-bottom: 5px;
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 5px;
 }
 
 .viewDetails {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
 }
 
 .viewDetails:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
 }

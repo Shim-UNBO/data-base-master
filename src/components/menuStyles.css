@@ -1,163 +1,163 @@
 .menu-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 auto;
-  max-width: 800px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 800px;
 }
 
 .menu {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .menu img {
-  width: 150px;
-  height: 150px;
-  border-radius: 50px;
-  object-fit: cover;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: 150px;
+    height: 150px;
+    border-radius: 50px;
+    object-fit: cover;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .menuTitle {
-  font-size: 18px;
-  margin-top: 10px;
+    font-size: 18px;
+    margin-top: 10px;
 }
 
 .menuDetails {
-  background-color: #4caf50;
-  color: #fff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: background-color 0.3s ease;
+    background-color: #4caf50;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
 }
 
 .menuDetails:hover {
-  background-color: #45a049;
+    background-color: #45a049;
 }
 
 /* CSS for the popup */
 .popup {
-  /* color: #fff; */
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #0E3B68;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 90%;
-  max-height: 90%;
-  overflow-y: auto;
+    /* color: #fff; */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #0e3b68;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 90%;
+    max-height: 90%;
+    overflow-y: auto;
 }
 
 .popup-header {
-  text-align: center;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #fff; /* 헤더와 내용 사이에 border 추가 */
-  padding-bottom: 10px; /* 헤더와 내용 사이 간격 주기 */
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #fff; /* 헤더와 내용 사이에 border 추가 */
+    padding-bottom: 10px; /* 헤더와 내용 사이 간격 주기 */
 }
 
 .popup-header h2 {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-  color: white;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    color: white;
 }
 
 .popup-content {
-  margin-bottom: 20px;
-  border-bottom: 1px solid #fff; /* 내용과 버튼 사이에 border 추가 */
-  padding-bottom: 10px; /* 내용과 버튼 사이 간격 주기 */
+    margin-bottom: 20px;
+    border-bottom: 1px solid #fff; /* 내용과 버튼 사이에 border 추가 */
+    padding-bottom: 10px; /* 내용과 버튼 사이 간격 주기 */
 }
 
 .popup-content p {
-  font-size: 16px;
-  margin-bottom: 8px;
+    font-size: 16px;
+    margin-bottom: 8px;
 }
 
 .popup-button {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .popup-button button {
-  background-color: #4caf50;
-  color: #fff;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 0 10px;
-  transition: background-color 0.3s ease;
+    background-color: #4caf50;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
 }
 
 .popup-button button:hover {
-  background-color: #45a049;
+    background-color: #45a049;
 }
 
-.key{
-  display: list-item;
-  font-weight: bold;
-  padding-right: 10px; /* 텍스트와 값 사이 간격 주기 */
-  margin-right: 10px; /* 텍스트와 값 사이 간격 주기 */
-  color: white;
+.key {
+    display: list-item;
+    font-weight: bold;
+    padding-right: 10px; /* 텍스트와 값 사이 간격 주기 */
+    margin-right: 10px; /* 텍스트와 값 사이 간격 주기 */
+    color: white;
 }
 
-.popup-content input[type="text"],
+.popup-content input[type='text'],
 .popup-content textarea {
-  width: 300px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 10px;
+    width: 300px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
 }
 
-.popup-content input[type="text"]:focus,
+.popup-content input[type='text']:focus,
 .popup-content textarea:focus {
-  outline: none;
-  border-color: #4CAF50;
+    outline: none;
+    border-color: #4caf50;
 }
 
 .hidden {
-  display: none;
+    display: none;
 }
 
-.addButton{
-  position: absolute; 
-  top: 70px;
-  right: 25%;
-  background-color: #0E3B68;
-  color: white;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  animation: twinkling 1s infinite; 
+.addButton {
+    position: absolute;
+    top: 70px;
+    right: 25%;
+    background-color: #0e3b68;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    animation: twinkling 1s infinite;
 }
 @keyframes twinkling {
-  0% {
-    background-color: #4d0808;
-  }
-  30% {
-    background-color: #096b6b;
-  }
-  50% {
-    background-color: #6d6d08;
-  }
-  100% {
-    background-color: #0E3B68;
-  }
+    0% {
+        background-color: #4d0808;
+    }
+    30% {
+        background-color: #096b6b;
+    }
+    50% {
+        background-color: #6d6d08;
+    }
+    100% {
+        background-color: #0e3b68;
+    }
 }
 .addButton:hover {
-  background-color: #051c33;
+    background-color: #051c33;
 }
