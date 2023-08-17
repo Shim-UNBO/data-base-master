@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { Layout, Menu, theme } from 'antd';
 import {
     Btn,
     BtnBox,
@@ -23,6 +24,8 @@ import MenuControl from '../components/MenuControl';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 
+const { Header, Content, Footer, Sider } = Layout;
+
 const PAGES = {
     MAIN: 'main',
     PAYMENT: 'payment',
@@ -38,12 +41,15 @@ const PAGES = {
 };
 
 const TablePage = () => {
+    const category = localStorage.getItem('category');
+
     const [cookies, setCookie] = useCookies(['id']);
     const [access, setAccess] = useState(false);
     const [currentPage, setCurrentPage] = useState(PAGES.MAIN);
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const [userInfo, setUserInfo] = useState(null);
+    const [mainTitle, setMainTitle] = useState('');
     const onId = (e) => setId(e.target.value);
     const onPassword = (e) => setPassword(e.target.value);
     const onKeyPress = (e) => {
@@ -51,6 +57,11 @@ const TablePage = () => {
             onSubmit();
         }
     };
+
+    const {
+        token: { colorBgContainer },
+    } = theme.useToken();
+
     // SUBSCRIPTION BUTTON STATES :
 
     // SEARCH STATES:
@@ -58,6 +69,23 @@ const TablePage = () => {
     // const [searchValue, setSearchValue] = useState('');
 
     // LOGIN PAGE FUNCTIONS:
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.post(
+                    'https://api.mever.me:8080/getMainTitle',
+                    {
+                        category: category,
+                    }
+                );
+                const { title } = response.data;
+                setMainTitle(title);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData();
+    }, []);
 
     const onSubmit = () => {
         // 서버와 통신하여 회원 정보 확인
@@ -99,8 +127,90 @@ const TablePage = () => {
         setOpen(!open);
     };
 
+    const adminMenuItems = [
+        { key: 'MAIN', label: '메인' },
+        { key: 'PAYMENT', label: '결제 내역' },
+        { key: 'EMAIL', label: '이메일' },
+        { key: 'SMS', label: '메시지' },
+        { key: 'MEMBER', label: '고객' },
+        { key: 'CONTROL', label: '타이틀 변경' },
+        { key: 'MANAGEMENT', label: '상품 관리' },
+        { key: 'RESERVATION', label: '예약 관리' },
+        { key: 'SALES', label: '영업 관리' },
+    ];
+
+    const managerMenuItems = [
+        { key: 'MAIN', label: '메인' },
+        { key: 'MEMBER', label: '고객' },
+        { key: 'CONTROL', label: '타이틀 변경' },
+        { key: 'MANAGEMENT', label: '상품 관리' },
+        { key: 'RESERVATION', label: '예약 관리' },
+    ];
+
+    const masterMenuItems = [
+        { key: 'MAIN', label: '메인' },
+        { key: 'PAYMENT', label: '결제 내역' },
+        { key: 'EMAIL', label: '이메일' },
+        { key: 'SMS', label: '메시지' },
+        { key: 'MEMBER', label: '고객' },
+        { key: 'CONTROL', label: '타이틀 변경' },
+        { key: 'MANAGEMENT', label: '상품 관리' },
+        { key: 'RESERVATION', label: '예약 관리' },
+        { key: 'SALES', label: '영업 관리' },
+        { key: 'MENUCONTROL', label: '사이트 설정' },
+    ];
+
+    let menuItems = [];
+
+    switch (userInfo && userInfo.name) {
+        case 'admin':
+            menuItems = adminMenuItems;
+            break;
+        case 'manager':
+            menuItems = managerMenuItems;
+            break;
+        case 'master':
+            menuItems = masterMenuItems;
+            break;
+    }
+
+    const handleMenuClick = ({ key }) => {
+        switch (key) {
+            case 'MAIN':
+                onPageChange(PAGES.MAIN);
+                break;
+            case 'PAYMENT':
+                onPageChange(PAGES.PAYMENT);
+                break;
+            case 'EMAIL':
+                onPageChange(PAGES.EMAIL);
+                break;
+            case 'SMS':
+                onPageChange(PAGES.SMS);
+                break;
+            case 'MEMBER':
+                onPageChange(PAGES.MEMBER);
+                break;
+            case 'CONTROL':
+                onPageChange(PAGES.CONTROL);
+                break;
+            case 'MANAGEMENT':
+                onPageChange(PAGES.MANAGEMENT);
+                break;
+            case 'RESERVATION':
+                onPageChange(PAGES.RESERVATION);
+                break;
+            case 'SALES':
+                onSales();
+                break;
+            case 'MENUCONTROL':
+                onPageChange(PAGES.MENUCONTROL);
+                break;
+        }
+    };
+
     return (
-        <Container>
+        <div>
             <LoginBox
                 style={access ? { display: 'none' } : { display: 'flex' }}
             >
@@ -116,667 +226,88 @@ const TablePage = () => {
             </LoginBox>
 
             {access && (
-                <Sidebar className={open ? 'sidebar-active' : 'sidebar'}>
-                    <CloseWrap>
-                        <Icon.Close
-                            onClick={() => {
-                                setOpen(false);
-                            }}
+                <Layout style={{ minHeight: '100vh' }}>
+                    <Sider
+                        breakpoint="lg"
+                        collapsedWidth="0"
+                        onBreakpoint={(broken) => {
+                            console.log(broken);
+                        }}
+                        onCollapse={(collapsed, type) => {
+                            console.log(collapsed, type);
+                        }}
+                    >
+                        <h1 style={{ color: '#FFF', textAlign: 'center' }}>
+                            LOGO
+                        </h1>
+                        <Menu
+                            theme="dark"
+                            mode="inline"
+                            defaultSelectedKeys={['MAIN']}
+                            items={menuItems}
+                            onClick={handleMenuClick}
                         />
-                    </CloseWrap>
-                    {userInfo.name === 'admin' && (
-                        <>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.MAIN)}
-                                style={
-                                    currentPage === PAGES.MAIN
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
+                    </Sider>
+                    <Layout>
+                        {access && currentPage === PAGES.MAIN && (
+                            <Header
+                                style={{
+                                    padding: 0,
+                                    background: colorBgContainer,
+                                }}
                             >
-                                메인
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.PAYMENT)}
-                                style={
-                                    currentPage === PAGES.PAYMENT
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
+                                <h3 style={{ margin: 0, textAlign: 'center' }}>
+                                    {mainTitle}
+                                </h3>
+                            </Header>
+                        )}
+                        <Content
+                            style={{
+                                margin: '24px 16px',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    minHeight: 'calc(100vh - 112px)',
+                                    padding: '20px',
+                                    backgroundColor: '#FFF',
+                                }}
                             >
-                                결제 내역
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.EMAIL)}
-                                style={
-                                    currentPage === PAGES.EMAIL
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                이메일
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.SMS)}
-                                style={
-                                    currentPage === PAGES.SMS
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                메시지
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.MEMBER)}
-                                style={
-                                    currentPage === PAGES.MEMBER
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                고객
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.CONTROL)}
-                                style={
-                                    currentPage === PAGES.CONTROL
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                타이틀 변경
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.MANAGEMENT)}
-                                style={
-                                    currentPage === PAGES.MANAGEMENT
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                상품 관리
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.RESERVATION)}
-                                style={
-                                    currentPage === PAGES.RESERVATION
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                예약 관리
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={onSales}
-                                style={
-                                    currentPage === PAGES.SALES
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                영업 관리
-                            </Btn>
-                        </>
-                    )}
-                    {userInfo.name === 'manager' && (
-                        // 일반 사용자 계정 메뉴
-                        <>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.MAIN)}
-                                style={
-                                    currentPage === PAGES.MAIN
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                메인
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.MEMBER)}
-                                style={
-                                    currentPage === PAGES.MEMBER
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                고객
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.CONTROL)}
-                                style={
-                                    currentPage === PAGES.CONTROL
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                타이틀 변경
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.MANAGEMENT)}
-                                style={
-                                    currentPage === PAGES.MANAGEMENT
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                상품 관리
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.RESERVATION)}
-                                style={
-                                    currentPage === PAGES.RESERVATION
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                예약 관리
-                            </Btn>
-                        </>
-                    )}
-                    {userInfo.name === 'master' && (
-                        // 마스터 관리자 계정 메뉴
-                        <BtnBox>
-                            <BtnBox>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() => onPageChange(PAGES.MAIN)}
-                                    style={
-                                        currentPage === PAGES.MAIN
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    메인
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() => onPageChange(PAGES.PAYMENT)}
-                                    style={
-                                        currentPage === PAGES.PAYMENT
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    결제 내역
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() => onPageChange(PAGES.EMAIL)}
-                                    style={
-                                        currentPage === PAGES.EMAIL
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    이메일
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() => onPageChange(PAGES.SMS)}
-                                    style={
-                                        currentPage === PAGES.SMS
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    메시지
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() => onPageChange(PAGES.MEMBER)}
-                                    style={
-                                        currentPage === PAGES.MEMBER
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    고객
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() => onPageChange(PAGES.CONTROL)}
-                                    style={
-                                        currentPage === PAGES.CONTROL
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    타이틀 변경
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() =>
-                                        onPageChange(PAGES.MANAGEMENT)
-                                    }
-                                    style={
-                                        currentPage === PAGES.MANAGEMENT
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    상품 관리
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() =>
-                                        onPageChange(PAGES.RESERVATION)
-                                    }
-                                    style={
-                                        currentPage === PAGES.RESERVATION
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    예약 관리
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={onSales}
-                                    style={
-                                        currentPage === PAGES.SALES
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    영업 관리
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() =>
-                                        onPageChange(PAGES.MENUCONTROL)
-                                    }
-                                    style={
-                                        currentPage === PAGES.MENUCONTROL
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    사이트 설정
-                                </Btn>
-                            </BtnBox>
-                        </BtnBox>
-                    )}
-                </Sidebar>
+                                {access && currentPage === PAGES.MAIN && (
+                                    <MainAnalytics />
+                                )}
+                                {access && currentPage === PAGES.PAYMENT && (
+                                    <PaymentList />
+                                )}
+                                {access && currentPage === PAGES.EMAIL && (
+                                    <EmailList />
+                                )}
+                                {access && currentPage === PAGES.SMS && (
+                                    <SmsList />
+                                )}
+                                {access && currentPage === PAGES.MEMBER && (
+                                    <MemberList />
+                                )}
+                                {access && currentPage === PAGES.CONTROL && (
+                                    <ContolList />
+                                )}
+                                {access && currentPage === PAGES.MANAGEMENT && (
+                                    <Management />
+                                )}
+                                {access &&
+                                    currentPage === PAGES.RESERVATION && (
+                                        <ReservationList />
+                                    )}
+                                {access &&
+                                    currentPage === PAGES.MENUCONTROL && (
+                                        <MenuControl />
+                                    )}
+                            </div>
+                        </Content>
+                    </Layout>
+                </Layout>
             )}
-            {access && <Icon.Menu onClick={onOpen} />}
-
-            {access && userInfo && (
-                <div>
-                    {/* 로그인 사용자에 따라 다른 메뉴를 보여줌 */}
-                    {userInfo.name === 'admin' && (
-                        // admin 계정 메뉴
-                        <BtnBox>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.MAIN)}
-                                style={
-                                    currentPage === PAGES.MAIN
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                메인
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.PAYMENT)}
-                                style={
-                                    currentPage === PAGES.PAYMENT
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                결제 내역
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.EMAIL)}
-                                style={
-                                    currentPage === PAGES.EMAIL
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                이메일
-                            </Btn>
-                            {/* <Btn margin='10px 20px 10px 0' onClick={onSend} style={emailSendPage ? {color:'#000', background: 'coral'} : {color: '#fff'}}>이메일보내기</Btn> */}
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.SMS)}
-                                style={
-                                    currentPage === PAGES.SMS
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                메시지
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.MEMBER)}
-                                style={
-                                    currentPage === PAGES.MEMBER
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                고객
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.CONTROL)}
-                                style={
-                                    currentPage === PAGES.CONTROL
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                타이틀 변경
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.MANAGEMENT)}
-                                style={
-                                    currentPage === PAGES.MANAGEMENT
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                상품 관리
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.RESERVATION)}
-                                style={
-                                    currentPage === PAGES.RESERVATION
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                예약 관리
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={onSales}
-                                style={
-                                    currentPage === PAGES.SALES
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                영업 관리
-                            </Btn>
-                        </BtnBox>
-                    )}
-                    {userInfo.name === 'manager' && (
-                        // 일반 사용자 계정 메뉴
-                        <BtnBox>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.MAIN)}
-                                style={
-                                    currentPage === PAGES.MAIN
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                메인
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.MEMBER)}
-                                style={
-                                    currentPage === PAGES.MEMBER
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                고객
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.CONTROL)}
-                                style={
-                                    currentPage === PAGES.CONTROL
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                타이틀 변경
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.MANAGEMENT)}
-                                style={
-                                    currentPage === PAGES.MANAGEMENT
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                상품 관리
-                            </Btn>
-                            <Btn
-                                margin="10px 20px 10px 0"
-                                onClick={() => onPageChange(PAGES.RESERVATION)}
-                                style={
-                                    currentPage === PAGES.RESERVATION
-                                        ? { color: '#000', background: 'coral' }
-                                        : { color: '#fff' }
-                                }
-                            >
-                                예약 관리
-                            </Btn>
-                        </BtnBox>
-                    )}
-                    {userInfo.name === 'master' && (
-                        // 마스터 관리자 계정 메뉴
-                        <BtnBox>
-                            <BtnBox>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() => onPageChange(PAGES.MAIN)}
-                                    style={
-                                        currentPage === PAGES.MAIN
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    메인
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() => onPageChange(PAGES.PAYMENT)}
-                                    style={
-                                        currentPage === PAGES.PAYMENT
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    결제 내역
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() => onPageChange(PAGES.EMAIL)}
-                                    style={
-                                        currentPage === PAGES.EMAIL
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    이메일
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() => onPageChange(PAGES.SMS)}
-                                    style={
-                                        currentPage === PAGES.SMS
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    메시지
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() => onPageChange(PAGES.MEMBER)}
-                                    style={
-                                        currentPage === PAGES.MEMBER
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    고객
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() => onPageChange(PAGES.CONTROL)}
-                                    style={
-                                        currentPage === PAGES.CONTROL
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    타이틀 변경
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() =>
-                                        onPageChange(PAGES.MANAGEMENT)
-                                    }
-                                    style={
-                                        currentPage === PAGES.MANAGEMENT
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    상품 관리
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() =>
-                                        onPageChange(PAGES.RESERVATION)
-                                    }
-                                    style={
-                                        currentPage === PAGES.RESERVATION
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    예약 관리
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={onSales}
-                                    style={
-                                        currentPage === PAGES.SALES
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    영업 관리
-                                </Btn>
-                                <Btn
-                                    margin="10px 20px 10px 0"
-                                    onClick={() =>
-                                        onPageChange(PAGES.MENUCONTROL)
-                                    }
-                                    style={
-                                        currentPage === PAGES.MENUCONTROL
-                                            ? {
-                                                  color: '#000',
-                                                  background: 'coral',
-                                              }
-                                            : { color: '#fff' }
-                                    }
-                                >
-                                    사이트 설정
-                                </Btn>
-                            </BtnBox>
-                        </BtnBox>
-                    )}
-                </div>
-            )}
-            {access && currentPage === PAGES.MAIN && <MainAnalytics />}
-            {access && currentPage === PAGES.PAYMENT && <PaymentList />}
-            {access && currentPage === PAGES.EMAIL && <EmailList />}
-            {access && currentPage === PAGES.SMS && <SmsList />}
-            {access && currentPage === PAGES.MEMBER && <MemberList />}
-            {access && currentPage === PAGES.CONTROL && <ContolList />}
-            {access && currentPage === PAGES.MANAGEMENT && <Management />}
-            {access && currentPage === PAGES.RESERVATION && <ReservationList />}
-            {access && currentPage === PAGES.MENUCONTROL && <MenuControl />}
-        </Container>
+        </div>
     );
 };
 
