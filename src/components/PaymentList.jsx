@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Table } from 'antd';
 import {
     Main,
     Head,
@@ -12,6 +13,16 @@ import {
 const PaymentList = () => {
     const [users, setUsers] = useState([]);
     const category = localStorage.getItem('category');
+
+    const columns = [
+        { title: '일자', dataIndex: 'approvedAt', key: 'approvedAt' },
+        { title: '이름', dataIndex: 'name', key: 'name' },
+        { title: '이메일', dataIndex: 'email', key: 'email' },
+        { title: '전화번호', dataIndex: 'phone', key: 'phone' },
+        { title: '설문 조사 결과', dataIndex: 'dcrp', key: 'dcrp' },
+        { title: '상품명', dataIndex: 'orderName', key: 'orderName' },
+        { title: '상품 가격', dataIndex: 'totalAmount', key: 'totalAmount' },
+    ];
 
     useEffect(() => {
         axios
@@ -26,42 +37,7 @@ const PaymentList = () => {
     return (
         <>
             <Space></Space>
-            <Main>
-                <Head>
-                    <HeadText>일자</HeadText>
-                    <HeadText>이름</HeadText>
-                    <HeadText>이메일</HeadText>
-                    <HeadText>전화번호</HeadText>
-                    <HeadText>설문 조사 결과</HeadText>
-                    <HeadText>상품명</HeadText>
-                    <HeadText>상품 가격</HeadText>
-                </Head>
-                <BodyWrap>
-                    {users.map((user, index) => (
-                        <Body
-                            key={index}
-                            style={
-                                index % 2 === 0
-                                    ? { background: 'rgba(0, 0, 0, 0.05)' }
-                                    : { background: 'white' }
-                            }
-                        >
-                            <BodyText>{user.approvedAt}</BodyText>
-                            <BodyText>{user.name}</BodyText>
-                            <BodyText>{user.email}</BodyText>
-                            <BodyText>{user.phone}</BodyText>
-                            <BodyText>{user.dcrp}</BodyText>
-                            <BodyText>{user.orderName}</BodyText>
-                            <BodyText>
-                                {`${
-                                    user.totalAmount ? user.totalAmount : 0
-                                }`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
-                                원
-                            </BodyText>
-                        </Body>
-                    ))}
-                </BodyWrap>
-            </Main>
+            <Table dataSource={users} columns={columns} />
         </>
     );
 };
