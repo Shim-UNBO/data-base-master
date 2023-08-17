@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table } from 'antd';
+
+import { dateFilter } from '../utils';
 import {
     Main,
     Head,
@@ -31,7 +33,12 @@ const PaymentList = () => {
                 { category }
             )
             .then((data) => {
-                setUsers(data.data);
+                setUsers(
+                    data.data.map((item) => {
+                        item.approvedAt = dateFilter(item.approvedAt);
+                        return item;
+                    })
+                );
             });
     }, []);
     return (

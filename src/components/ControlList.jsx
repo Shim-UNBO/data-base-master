@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Head, HeadText, Body, InputContainer, Input, Btn } from './mainStyle';
+import { Select, Button, Row, Col, Input } from 'antd';
+import { Head, HeadText, Body, InputContainer, Btn } from './mainStyle';
 import axios from 'axios';
 import { Space, Main } from '../table/style';
 import { useCookies } from 'react-cookie';
@@ -14,8 +15,8 @@ const ContolList = () => {
     const [selectedValue, setSelectedValue] = useState('');
     const [cookies, setCookie, removeCookie] = useCookies(['id']);
     const newJeans = cookies.id === 'true';
-    const handleSelectChange = (event) => {
-        setSelectedValue(event.target.value); // 선택된 값 업데이트
+    const handleSelectChange = (value) => {
+        setSelectedValue(value); // 선택된 값 업데이트
     };
 
     const handleButtonClick = () => {
@@ -116,115 +117,195 @@ const ContolList = () => {
     return (
         <>
             {newJeans && (
-                <div>
-                    <select value={selectedValue} onChange={handleSelectChange}>
-                        <option value="">사이트 별 리스트 ↓</option>
-                        <option value="/art1/">청담 갤러리1부(단체전)</option>
-                        <option value="/art2/">청담 갤러리2부(단체전)</option>
-                        <option value="/art3/">남산 갤러리(김미영 작가)</option>
-                        <option value="/cafe1/">선릉 카페(대단한 커피)</option>
-                        <option value="/hospital1/">
-                            강남병원 (지인 병원)
-                        </option>
-                        <option value="/office1/">법인 빌딩 (삼익영농)</option>
-                        <option value="/academy1/">
-                            강남 학원 (영어 학원)
-                        </option>
-                        <option value="/art4/">종로 갤러리2(백영희작가)</option>
-                        <option value="/mart1/">편의점</option>
-                        <option value="/antique1/">대전아트아카데미</option>
-                        <option value="/cafe2/">대전자산협회</option>
-                        <option value="/parking1/">부천재건축단지</option>
-                        <option value="/rebuilding1/">부천 대진아파트</option>
-                        <option value="/hall1/">부산벡스코</option>
-                        <option value="/building2/">수원 관공서</option>
-                        <option value="/warship1/">용산 전쟁 기념관</option>
-                        <option value="/academy2/">고려직업전문학교</option>
-                        <option value="/academy3/">고려직업전문학교3</option>
-                        <option value="/academy4/">아카데미4</option>
-                        <option value="/academy5/">아카데미5</option>
-                        <option value="/office2/">크럼플 오피스</option>
-                        <option value="/studio1/">스튜디오</option>
-                        <option value="/hall2/">부산벡스코2</option>
-                        <option value="/machine1/">벡스코/수원관공서</option>
-                        <option value="/kpop1/">BTS 초콜릿</option>
-                        <option value="/modelhouse2/">
-                            3D 신촌 빌리브 디 에이블
-                        </option>
-                        <option value="/antique2/">서울 감정평가원</option>
-                        <option value="/pub1/">앤티크 펍(미자살롱)</option>
-                        <option value="/modelhouse1/">
-                            3D 신촌 빌리브 디 에이블
-                        </option>
-                    </select>
-                    <button onClick={handleButtonClick}>전송</button>
-                </div>
+                <Row gutter={20} style={{ marginBottom: '20px' }}>
+                    <Col span={8}>
+                        <Select
+                            defaultValue=""
+                            style={{ width: '100%' }}
+                            onChange={handleSelectChange}
+                            options={[
+                                {
+                                    value: '',
+                                    label: '사이트 별 리스트 ↓',
+                                },
+                                {
+                                    value: '/art1/',
+                                    label: '청담 갤러리1부(단체전)',
+                                },
+                                {
+                                    value: '/art2/',
+                                    label: '청담 갤러리2부(단체전)',
+                                },
+                                {
+                                    value: '/art3/',
+                                    label: '남산 갤러리(김미영 작가)',
+                                },
+                                {
+                                    value: '/cafe1/',
+                                    label: '선릉 카페(대단한 커피)',
+                                },
+                                {
+                                    value: '/hospital1/',
+                                    label: '강남병원 (지인 병원)',
+                                },
+                                {
+                                    value: '/office1/',
+                                    label: '법인 빌딩 (삼익영농)',
+                                },
+                                {
+                                    value: '/academy1/',
+                                    label: '강남 학원 (영어 학원)',
+                                },
+                                {
+                                    value: '/art4/',
+                                    label: '종로 갤러리2(백영희작가)',
+                                },
+                                {
+                                    value: '/mart1/',
+                                    label: '편의점',
+                                },
+                                {
+                                    value: '/antique1/',
+                                    label: '대전아트아카데미',
+                                },
+                                {
+                                    value: '/cafe2/',
+                                    label: '대전자산협회',
+                                },
+                                {
+                                    value: '/parking1/',
+                                    label: '부천재건축단지',
+                                },
+                                {
+                                    value: '/rebuilding1/',
+                                    label: '부천 대진아파트',
+                                },
+                                {
+                                    value: '/hall1/',
+                                    label: '부산벡스코',
+                                },
+                                {
+                                    value: '/building2/',
+                                    label: '수원 관공서',
+                                },
+                                {
+                                    value: '/warship1/',
+                                    label: '용산 전쟁 기념관',
+                                },
+                                {
+                                    value: '/academy2/',
+                                    label: '고려직업전문학교',
+                                },
+                                {
+                                    value: '/academy3/',
+                                    label: '고려직업전문학교3',
+                                },
+                                {
+                                    value: '/academy4/',
+                                    label: '아카데미4',
+                                },
+                                {
+                                    value: '/academy5/',
+                                    label: '아카데미5',
+                                },
+                                {
+                                    value: '/office2/',
+                                    label: '크럼플 오피스',
+                                },
+                                {
+                                    value: '/studio1/',
+                                    label: '스튜디오',
+                                },
+                                {
+                                    value: '/hall2/',
+                                    label: '부산벡스코2',
+                                },
+                                {
+                                    value: '/machine1/',
+                                    label: '벡스코/수원관공서',
+                                },
+                                {
+                                    value: '/kpop1/',
+                                    label: 'BTS 초콜릿',
+                                },
+                                {
+                                    value: '/modelhouse2/',
+                                    label: '3D 신촌 빌리브 디 에이블',
+                                },
+                                {
+                                    value: '/antique2/',
+                                    label: '서울 감정평가원',
+                                },
+                                {
+                                    value: '/pub1/',
+                                    label: '앤티크 펍(미자살롱)',
+                                },
+                                {
+                                    value: '/modelhouse1/',
+                                    label: '3D 신촌 빌리브 디 에이블',
+                                },
+                            ]}
+                        />
+                    </Col>
+                    <Col span={8}>
+                        <Button type="primary" onClick={handleButtonClick}>
+                            전송
+                        </Button>
+                    </Col>
+                </Row>
             )}
+            <Row gutter={20}>
+                <Col span={8} style={{ display: 'flex', alignItems: 'center' }}>
+                    <label style={{ width: 40 }}>메인:</label>
+                    <Input
+                        id="mainTitle"
+                        value={mainTitle}
+                        onChange={handleInputChange}
+                        placeholder={localStorage.getItem('mainTitle')}
+                    />
+                </Col>
+                <Col span={8} style={{ display: 'flex', alignItems: 'center' }}>
+                    <label style={{ width: 40 }}>서브:</label>
+                    <Input
+                        id="subTitle"
+                        value={subTitle}
+                        onChange={handleInputChange}
+                        placeholder={localStorage.getItem('subTitle')}
+                    />
+                </Col>
+                <Col span={8}>
+                    <Button type="primary" onClick={handleUpdateTitle}>
+                        업데이트
+                    </Button>
+                </Col>
+            </Row>
             <Space />
-            <Main>
-                <Head>
-                    <HeadText>페이지 설정</HeadText>
-                </Head>
-                <Body
-                    style={
-                        window.innerWidth < 500
-                            ? {
-                                  flexDirection: 'column',
-                                  justifyContent: 'center',
-                                  width: '100%',
-                              }
-                            : { flexDirection: 'row' }
-                    }
-                >
-                    <InputContainer>
-                        메인 :{' '}
-                        <input
-                            type="text"
-                            id="mainTitle"
-                            value={mainTitle}
-                            onChange={handleInputChange}
-                            placeholder={localStorage.getItem('mainTitle')}
-                        />
-                    </InputContainer>
-                    <InputContainer>
-                        서브 :{' '}
-                        <input
-                            type="text"
-                            id="subTitle"
-                            value={subTitle}
-                            onChange={handleInputChange}
-                            placeholder={localStorage.getItem('subTitle')}
-                        />
-                    </InputContainer>
-                    <Btn onClick={handleUpdateTitle}>업데이트</Btn>
-                </Body>
-                <div className="title-list-container">
-                    <h1>이력</h1>
-                    {titleList.map((title, index) => (
-                        <div className="product" key={index}>
-                            <h3>
-                                TiTle: {title.title} SubTitle : {title.subTitle}{' '}
-                                <button
-                                    onClick={() =>
-                                        handleApplyButton(
-                                            title.title,
-                                            title.subTitle
-                                        )
-                                    }
-                                >
-                                    적용
-                                </button>
-                                <button
-                                    onClick={() => hadleDeleteButton(title.seq)}
-                                >
-                                    삭제
-                                </button>{' '}
-                                {title.insertDate}
-                            </h3>
-                        </div>
-                    ))}
-                </div>
-            </Main>
+            <div className="title-list-container">
+                <h1>이력</h1>
+                {titleList.map((title, index) => (
+                    <div className="product" key={index}>
+                        <h3>
+                            TiTle: {title.title} SubTitle : {title.subTitle}{' '}
+                            <button
+                                onClick={() =>
+                                    handleApplyButton(
+                                        title.title,
+                                        title.subTitle
+                                    )
+                                }
+                            >
+                                적용
+                            </button>
+                            <button
+                                onClick={() => hadleDeleteButton(title.seq)}
+                            >
+                                삭제
+                            </button>{' '}
+                            {title.insertDate}
+                        </h3>
+                    </div>
+                ))}
+            </div>
         </>
     );
 };

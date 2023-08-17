@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Table } from 'antd';
+
+import { dateFilter } from '../utils';
+
 import {
     Main,
     Head,
@@ -12,44 +16,32 @@ import {
 const EmailList = () => {
     const [emailList, setEmailList] = useState([]);
 
+    const columns = [
+        { title: '일자', dataIndex: 'date', key: 'date', width: 110 },
+        { title: '이메일', dataIndex: 'email', key: 'email' },
+        { title: '제목', dataIndex: 'title', key: 'title' },
+        { title: '내용', dataIndex: 'content', key: 'content' },
+        { title: '전화번호', dataIndex: 'phone', key: 'phone', width: 200 },
+    ];
+
     // EMAIL SENDING CONTENT DATA :
     useEffect(() => {
         axios
             .post('https://api.mever.me:8080/send/list?type=mail', {})
             .then((data) => {
-                setEmailList(data.data);
+                setEmailList(
+                    data.data.map((item) => {
+                        item.date = dateFilter(item.date);
+                        return item;
+                    })
+                );
             });
     }, []);
+
     return (
         <>
             <Space></Space>
-            <Main>
-                <Head>
-                    <HeadText>일자</HeadText>
-                    <HeadText>이메일</HeadText>
-                    <HeadText>제목</HeadText>
-                    <HeadText>내용</HeadText>
-                    <HeadText>전화번호</HeadText>
-                </Head>
-                <BodyWrap>
-                    {emailList.map((list, index) => (
-                        <Body
-                            key={index}
-                            style={
-                                index % 2 === 0
-                                    ? { background: 'rgba(0, 0, 0, 0.05)' }
-                                    : { background: 'white' }
-                            }
-                        >
-                            <BodyText>{list.date}</BodyText>
-                            <BodyText>{list.email}</BodyText>
-                            <BodyText>{list.title}</BodyText>
-                            <BodyText>{list.content}</BodyText>
-                            <BodyText>{list.phone}</BodyText>
-                        </Body>
-                    ))}
-                </BodyWrap>
-            </Main>
+            <Table dataSource={emailList} columns={columns} />
         </>
     );
 };

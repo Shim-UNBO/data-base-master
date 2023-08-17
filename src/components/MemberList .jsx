@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
+import { Select, Button, Table, Row, Col } from 'antd';
+
 import {
     Main,
     Head,
@@ -42,8 +44,67 @@ const MemberList = () => {
     const [cookies, setCookie, removeCookie] = useCookies(['id']);
     const newJeans = cookies.id === 'true';
 
-    const handleSelectChange = (event) => {
-        setSelectedValue(event.target.value); // 선택된 값 업데이트
+    const modelhouseColumns = [
+        {
+            title: '번호',
+            dataIndex: 'index',
+            key: 'index',
+            render: (text, record, index) => <span>{index + 1}</span>,
+        },
+        { title: '일자', dataIndex: 'regdate', key: 'regdate' },
+        { title: '이름', dataIndex: 'name', key: 'name' },
+        { title: '이메일', dataIndex: 'email', key: 'email' },
+        {
+            title: '전화번호',
+            dataIndex: 'phone',
+            key: 'phone',
+            render: (text) => <a href={`tel:${text}`}>{text}</a>,
+        },
+        { title: '진행', dataIndex: 'progress', key: 'progress' },
+        { title: '내용', dataIndex: 'dcrp', key: 'dcrp' },
+        { title: '담당자', dataIndex: 'manager', key: 'manager' },
+        {
+            title: '저장',
+            dataIndex: 'action',
+            key: 'action',
+            render: (text, record, index) => (
+                <Button type="primary" onClick={() => openModal(index)}>
+                    수정
+                </Button>
+            ),
+        },
+    ];
+    const columns = [
+        {
+            title: '번호',
+            dataIndex: 'index',
+            key: 'index',
+            render: (text, record, index) => <span>{index + 1}</span>,
+        },
+        { title: '일자', dataIndex: 'regdate', key: 'regdate' },
+        { title: '이름', dataIndex: 'name', key: 'name' },
+        { title: '이메일', dataIndex: 'email', key: 'email' },
+        {
+            title: '전화번호',
+            dataIndex: 'phone',
+            key: 'phone',
+            render: (text) => <a href={`tel:${text}`}>{text}</a>,
+        },
+        { title: '설문 조사 결과', dataIndex: 'dcrp', key: 'dcrp' },
+        {
+            title: '내용',
+            dataIndex: 'action',
+            key: 'action',
+            render: (text, record, index) => (
+                <Button type="primary" onClick={() => onSubscribe(index)}>
+                    구독 정보
+                </Button>
+            ),
+        },
+    ];
+
+    const handleSelectChange = (value) => {
+        setSelectedValue(value); // 선택된 값 업데이트
     };
 
     //전체선택 기능
@@ -306,231 +367,172 @@ const MemberList = () => {
     return (
         <>
             {newJeans && (
-                <div>
-                    <select value={selectedValue} onChange={handleSelectChange}>
-                        <option value="">사이트 별 고객 리스트 ↓</option>
-                        <option value="/art1/">청담 갤러리1부(단체전)</option>
-                        <option value="/art2/">청담 갤러리2부(단체전)</option>
-                        <option value="/art3/">남산 갤러리(김미영 작가)</option>
-                        <option value="/cafe1/">선릉 카페(대단한 커피)</option>
-                        <option value="/hospital1/">
-                            강남병원 (지인 병원)
-                        </option>
-                        <option value="/office1/">법인 빌딩 (삼익영농)</option>
-                        <option value="/academy1/">
-                            강남 학원 (영어 학원)
-                        </option>
-                        <option value="/art4/">종로 갤러리2(백영희작가)</option>
-                        <option value="/mart1/">편의점</option>
-                        <option value="/antique1/">대전아트아카데미</option>
-                        <option value="/cafe2/">대전자산협회</option>
-                        <option value="/parking1/">부천재건축단지</option>
-                        <option value="/rebuilding1/">부천 대진아파트</option>
-                        <option value="/hall1/">부산벡스코</option>
-                        <option value="/building2/">수원 관공서</option>
-                        <option value="/warship1/">용산 전쟁 기념관</option>
-                        <option value="/academy2/">고려직업전문학교</option>
-                        <option value="/academy3/">고려직업전문학교3</option>
-                        <option value="/academy4/">아카데미4</option>
-                        <option value="/academy5/">아카데미5</option>
-                        <option value="/office2/">크럼플 오피스</option>
-                        <option value="/studio1/">스튜디오</option>
-                        <option value="/hall2/">부산벡스코2</option>
-                        <option value="/machine1/">벡스코/수원관공서</option>
-                        <option value="/kpop1/">BTS 초콜릿</option>
-                        <option value="/modelhouse2/">
-                            3D 신촌 빌리브 디 에이블
-                        </option>
-                        <option value="/antique2/">서울 감정평가원</option>
-                        <option value="/pub1/">앤티크 펍(미자살롱)</option>
-                        <option value="/modelhouse1/">
-                            3D 신촌 빌리브 디 에이블
-                        </option>
-                    </select>
-                    <button onClick={handleButtonClick}>전송</button>
-                </div>
-            )}
-            <button onClick={handleSelectAll}> 전체 선택 </button>
-            {category.current === '/modelhouse1/' && (
-                <LoginInput
-                    type="text"
-                    value={searchKeyword}
-                    onChange={handleSearch}
-                    placeholder="검색어를 입력하세요"
-                />
-            )}
-            <Btn onClick={onSendList}>이메일 보내기</Btn>
-            {category.current === '/modelhouse1/' && (
-                <Btn onClick={downloadExcel}>엑셀 다운로드</Btn>
-            )}
-            <Main>
-                <Head>
-                    {category.current === '/modelhouse1/' ? (
-                        <>
-                            <HeadText>번호</HeadText>
-                            <HeadText flex=".4">선택</HeadText>
-                            <HeadText>일자</HeadText>
-                            <HeadText>이름</HeadText>
-                            <HeadText>이메일</HeadText>
-                            <HeadText>전화번호</HeadText>
-                            <HeadText>진행</HeadText>
-                            <HeadText>내용</HeadText>
-                            <HeadText>담당자</HeadText>
-                            <HeadText>저장</HeadText>
-                        </>
-                    ) : (
-                        <>
-                            <HeadText>번호</HeadText>
-                            <HeadText flex=".4">선택</HeadText>
-                            <HeadText>일자</HeadText>
-                            <HeadText>이름</HeadText>
-                            <HeadText>이메일</HeadText>
-                            <HeadText>전화번호</HeadText>
-                            <HeadText flex="1.6">설문 조사 결과</HeadText>
-                            <HeadText flex=".9">내용</HeadText>
-                        </>
-                    )}
-                </Head>
-                <BodyWrap>
-                    {filterMembers(memberList).map((list, index) => {
-                        if (category.current === '/modelhouse1/') {
-                            return (
-                                <Body
-                                    key={index}
-                                    style={
-                                        index % 2 === 0
-                                            ? {
-                                                  background:
-                                                      'rgba(0, 0, 0, 0.05)',
-                                              }
-                                            : { background: 'white' }
-                                    }
-                                >
-                                    <BodyText>{index + 1}</BodyText>
-                                    <BodyText flex=".4">
-                                        <input
-                                            className={`checkbox-${index}`}
-                                            style={{
-                                                width: '20px',
-                                                height: '20px',
-                                                cursor: 'pointer',
-                                            }}
-                                            type="checkbox"
-                                            onChange={() => {
-                                                onCheck(index);
-                                            }}
-                                        />
-                                    </BodyText>
-                                    <BodyText>{list.regdate}</BodyText>
-                                    <BodyText>{list.name}</BodyText>
-                                    <BodyText>{list.email}</BodyText>
-                                    <BodyText>
-                                        {' '}
-                                        <a href={`tel:${list.phone}`}>
-                                            {list.phone}
-                                        </a>
-                                    </BodyText>
-                                    <BodyText>{list.progress}</BodyText>
-                                    <BodyText>
-                                        <textarea
-                                            type="text"
-                                            value={list.dcrp}
-                                            readOnly
-                                        />
-                                    </BodyText>
-                                    <BodyText>{list.manager}</BodyText>
-                                    <BodyText flex=".9">
-                                        <Btn
-                                            style={
-                                                index === selectUser
-                                                    ? {
-                                                          background: 'coral',
-                                                          color: '#000',
-                                                          margin: '0',
-                                                      }
-                                                    : {
-                                                          border: 'none',
-                                                          margin: '0',
-                                                      }
-                                            }
-                                            onClick={() => openModal(index)}
-                                        >
-                                            수정
-                                        </Btn>
-                                    </BodyText>
-                                </Body>
-                            );
-                        } else {
-                            return (
-                                <Body
-                                    key={index}
-                                    style={
-                                        index % 2 === 0
-                                            ? {
-                                                  background:
-                                                      'rgba(0, 0, 0, 0.05)',
-                                              }
-                                            : { background: 'white' }
-                                    }
-                                >
-                                    <BodyText>{index + 1}</BodyText>
-                                    <BodyText flex=".4">
-                                        <input
-                                            className={`checkbox-${index}`}
-                                            style={{
-                                                width: '20px',
-                                                height: '20px',
-                                                cursor: 'pointer',
-                                            }}
-                                            type="checkbox"
-                                            onChange={() => {
-                                                onCheck(index);
-                                            }}
-                                        />
-                                    </BodyText>
-                                    <BodyText>{list.regdate}</BodyText>
-                                    <BodyText>{list.name}</BodyText>
-                                    <BodyText>{list.email}</BodyText>
-                                    <BodyText>
-                                        {' '}
-                                        <a
-                                            href="#"
-                                            onClick={() =>
-                                                callPhoneNumber(list.phone)
-                                            }
-                                        >
-                                            {list.phone}
-                                        </a>
-                                    </BodyText>
-                                    <BodyText flex="1.6">{list.dcrp}</BodyText>
-                                    <BodyText flex=".9">
-                                        <Btn
-                                            style={
-                                                index === selectUser
-                                                    ? {
-                                                          background: 'coral',
-                                                          color: '#000',
-                                                          margin: '0',
-                                                      }
-                                                    : {
-                                                          border: 'none',
-                                                          margin: '0',
-                                                      }
-                                            }
-                                            onClick={() => {
-                                                onSubscribe(index);
-                                            }}
-                                        >
-                                            구독 정보
-                                        </Btn>
-                                    </BodyText>
-                                </Body>
-                            );
-                        }
-                    })}
-                </BodyWrap>
-            </Main>
+                <Row gutter={20} style={{ marginBottom: '20px' }}>
+                    <Col span={8}>
+                        <Select
+                            defaultValue=""
+                            style={{
+                                width: '100%',
+                            }}
+                            onChange={handleSelectChange}
+                            options={[
+                                {
+                                    value: '',
+                                    label: '사이트 별 고객 리스트 ↓',
+                                },
+                                {
+                                    value: '/art1/',
+                                    label: '청담 갤러리1부(단체전)',
+                                },
+                                {
+                                    value: '/art2/',
+                                    label: '청담 갤러리2부(단체전)',
+                                },
+                                {
+                                    value: '/art3/',
+                                    label: '남산 갤러리(김미영 작가)',
+                                },
+                                {
+                                    value: '/cafe1/',
+                                    label: '선릉 카페(대단한 커피)',
+                                },
+                                {
+                                    value: '/hospital1/',
+                                    label: '강남병원 (지인 병원)',
+                                },
+                                {
+                                    value: '/office1/',
+                                    label: '법인 빌딩 (삼익영농)',
+                                },
+                                {
+                                    value: '/academy1/',
+                                    label: '강남 학원 (영어 학원)',
+                                },
+                                {
+                                    value: '/art4/',
+                                    label: '종로 갤러리2(백영희작가)',
+                                },
+                                {
+                                    value: '/mart1/',
+                                    label: '편의점',
+                                },
+                                {
+                                    value: '/antique1/',
+                                    label: '대전아트아카데미',
+                                },
+                                {
+                                    value: '/cafe2/',
+                                    label: '대전자산협회',
+                                },
+                                {
+                                    value: '/parking1/',
+                                    label: '부천재건축단지',
+                                },
+                                {
+                                    value: '/rebuilding1/',
+                                    label: '부천 대진아파트',
+                                },
+                                {
+                                    value: '/hall1/',
+                                    label: '부산벡스코',
+                                },
+                                {
+                                    value: '/building2/',
+                                    label: '수원 관공서',
+                                },
+                                {
+                                    value: '/warship1/',
+                                    label: '용산 전쟁 기념관',
+                                },
+                                {
+                                    value: '/academy2/',
+                                    label: '고려직업전문학교',
+                                },
+                                {
+                                    value: '/academy3/',
+                                    label: '고려직업전문학교3',
+                                },
+                                {
+                                    value: '/academy4/',
+                                    label: '아카데미4',
+                                },
+                                {
+                                    value: '/academy5/',
+                                    label: '아카데미5',
+                                },
+                                {
+                                    value: '/office2/',
+                                    label: '크럼플 오피스',
+                                },
+                                {
+                                    value: '/studio1/',
+                                    label: '스튜디오',
+                                },
+                                {
+                                    value: '/hall2/',
+                                    label: '부산벡스코2',
+                                },
+                                {
+                                    value: '/machine1/',
+                                    label: '벡스코/수원관공서',
+                                },
+                                {
+                                    value: '/kpop1/',
+                                    label: 'BTS 초콜릿',
+                                },
+                                {
+                                    value: '/modelhouse2/',
+                                    label: '3D 신촌 빌리브 디 에이블',
+                                },
+                                {
+                                    value: '/antique2/',
+                                    label: '서울 감정평가원',
+                                },
+                                {
+                                    value: '/pub1/',
+                                    label: '앤티크 펍(미자살롱)',
+                                },
+                                {
+                                    value: '/modelhouse1/',
+                                    label: '3D 신촌 빌리브 디 에이블',
+                                },
+                            ]}
+                        />
+                    </Col>
+                    <Col span={8}>
+                        <Button type="primary" onClick={handleButtonClick}>
+                            전송
+                        </Button>
+                    </Col>
+                    <Col span={8}>
+                        <Button onClick={onSendList} style={{ float: 'right' }}>
+                            이메일 보내기
+                        </Button>
+                    </Col>
+                    <Col span={24}>
+                        {category.current === '/modelhouse1/' && (
+                            <LoginInput
+                                type="text"
+                                value={searchKeyword}
+                                onChange={handleSearch}
+                                placeholder="검색어를 입력하세요"
+                            />
+                        )}
 
+                        {category.current === '/modelhouse1/' && (
+                            <Btn onClick={downloadExcel}>엑셀 다운로드</Btn>
+                        )}
+                    </Col>
+                </Row>
+            )}
+            <Table
+                dataSource={memberList}
+                columns={
+                    category.current === '/modelhouse1/'
+                        ? modelhouseColumns
+                        : columns
+                }
+            />
             {/* 모달 창 */}
             <Modal
                 isOpen={isModalOpen}
