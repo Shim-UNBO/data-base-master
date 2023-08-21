@@ -23,6 +23,7 @@ import ReservationList from '../components/ReservationList';
 import MenuControl from '../components/MenuControl';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
+import logoImage from '../assets/images/logo.png';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -238,7 +239,11 @@ const TablePage = () => {
                         }}
                     >
                         <h1 style={{ color: '#FFF', textAlign: 'center' }}>
-                            LOGO
+                            <img
+                                style={{ width: '60%' }}
+                                src={logoImage}
+                                alt="mever"
+                            />
                         </h1>
                         <Menu
                             theme="dark"

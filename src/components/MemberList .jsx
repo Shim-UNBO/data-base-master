@@ -136,7 +136,9 @@ const MemberList = () => {
             })
             .then((response) => {
                 setMemberList(
-                    response.data.filter((member) => member.adminYn !== 'Y')
+                    response.data
+                        .filter((member) => member.adminYn !== 'Y')
+                        .reverse()
                 );
             })
             .catch((error) => {
@@ -156,7 +158,9 @@ const MemberList = () => {
             })
             .then((response) => {
                 setMemberList(
-                    response.data.filter((member) => member.adminYn !== 'Y')
+                    response.data
+                        .filter((member) => member.adminYn !== 'Y')
+                        .reverse()
                 );
             })
             .catch((error) => {
@@ -228,10 +232,10 @@ const MemberList = () => {
                     .post('https://api.mever.me:8080/member/updateInfo', {
                         email: user.email,
                         phone: user.phone,
-                        progress: category.current,
+                        progress: category,
                         manager: mainId,
                         dcrp: dcrp,
-                        category: category.current,
+                        category: localStorage.getItem('category'),
                     })
                     .then((response) => {
                         // 성공적으로 서버에 저장한 경우
