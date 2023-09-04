@@ -22,3 +22,17 @@ code {
     right: 10px;
     cursor: pointer;
 }
+
+.pull-left {
+    float: left;
+}
+
+.pull-right {
+    float: right;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: block;
+}

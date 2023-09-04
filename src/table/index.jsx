@@ -21,6 +21,7 @@ import MainAnalytics from '../components/MainAnalytics';
 import Management from '../components/ManagementPage';
 import ReservationList from '../components/ReservationList';
 import MenuControl from '../components/MenuControl';
+import UploadVideo from '../components/UploadVideo/UploadVideo';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import logoImage from '../assets/images/logo.png';
@@ -39,6 +40,7 @@ const PAGES = {
     RESERVATION: 'reservation',
     SALES: 'sales',
     MENUCONTROL: 'menuControl',
+    UPLOADVIDEO: 'uploadVideo',
 };
 
 const TablePage = () => {
@@ -146,6 +148,7 @@ const TablePage = () => {
         { key: 'CONTROL', label: '타이틀 변경' },
         { key: 'MANAGEMENT', label: '상품 관리' },
         { key: 'RESERVATION', label: '예약 관리' },
+        { key: 'UPLOADVIDEO', label: '비디오 업로드' },
     ];
 
     const masterMenuItems = [
@@ -207,6 +210,8 @@ const TablePage = () => {
             case 'MENUCONTROL':
                 onPageChange(PAGES.MENUCONTROL);
                 break;
+            case 'UPLOADVIDEO':
+                onPageChange(PAGES.UPLOADVIDEO);
         }
     };
 
@@ -306,6 +311,10 @@ const TablePage = () => {
                                 {access &&
                                     currentPage === PAGES.MENUCONTROL && (
                                         <MenuControl />
+                                    )}
+                                {access &&
+                                    currentPage === PAGES.UPLOADVIDEO && (
+                                        <UploadVideo />
                                     )}
                             </div>
                         </Content>
