@@ -74,7 +74,7 @@ const ContolList = () => {
             .post('https://api.mever.me:8080/updateTitle', {
                 mainTitle: document.getElementById('mainTitle').value,
                 subTitle: document.getElementById('subTitle').value,
-                category,
+                category: localStorage.getItem('category'),
             })
             .then((response) => {
                 console.log('업데이트 완료');
